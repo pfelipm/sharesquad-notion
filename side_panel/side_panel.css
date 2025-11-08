@@ -1,0 +1,404 @@
+/* side_panel.css */
+
+/* --- Variables and Base --- */
+:root {
+  --primary-color: #4A90E2; /* A nice blue, similar to Notion/Google */
+  --primary-hover: #407DC7;
+  --success-color: #34C759;
+  --success-hover: #2DA84B;
+  --danger-color: #FF3B30;
+  --danger-hover: #E03025;
+  --text-color: #333;
+  --text-light: #666;
+  --border-color: #EAEAEA;
+  --bg-color: #F8F9FA;
+  --card-bg: #FFFFFF;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --radius: 8px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 14px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  overflow-y: auto;
+}
+
+/* --- Header --- */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-header .title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.lang-toggle {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.lang-toggle:hover {
+  background-color: var(--bg-color);
+}
+
+/* --- Main Content --- */
+.main-container {
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* NEW: Style for the Import/Export section */
+.data-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 0; /* Add some vertical spacing */
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* NEW: Wrapper for title and toggle */
+.card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-header h2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* NEW: Discreet checkbox styling */
+.view-toggle {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+  vertical-align: middle;
+  margin-top: -2px; /* Fine-tune alignment */
+}
+
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-light);
+}
+
+/* --- Item Lists (Users & Groups) --- */
+.item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item-list .item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.2s;
+}
+
+.item-list .item:last-child {
+  border-bottom: none;
+}
+
+.item-list .item:hover {
+  background-color: var(--bg-color);
+}
+
+.item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* Ensure it takes up space to push actions to the right */
+  flex-grow: 1;
+  min-width: 0; /* Prevents overflow */
+}
+
+.item-main > span {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* --- Tags (for group members) --- */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.tag {
+  background-color: var(--bg-color);
+  color: var(--text-light);
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+/* --- Buttons --- */
+.button {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.button.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+.button.primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.button.secondary {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+.button.secondary:hover {
+  background-color: var(--bg-color);
+}
+
+.button.success {
+  background-color: var(--success-color);
+  color: white;
+}
+.button.success:hover {
+  background-color: var(--success-hover);
+}
+
+.button.small {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.button.icon {
+  background: none;
+  padding: 4px;
+  font-size: 16px;
+  line-height: 1;
+}
+.button.icon:hover {
+  background-color: var(--bg-color);
+}
+.button.icon.delete:hover {
+  color: var(--danger-color);
+}
+
+/* --- Modal --- */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* FIX: Changed selector from '.modal-content h3' to '#modal-title' 
+  to match the ID in the HTML and increase specificity.
+*/
+#modal-title {
+  padding: 16px;
+  font-size: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* FIX: Changed selector from '.modal-body' to '#modal-body' 
+  to match the ID in the HTML. This was the main bug.
+*/
+#modal-body {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* --- NEW CSS RULE --- */
+/* This was missing. We add the same padding/border as the main modal title */
+#dialog-modal-title {
+  padding: 16px;
+  font-size: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+/* --- END NEW RULE --- */
+
+
+/* NEW: Styles for confirm/alert modal body */
+#dialog-modal-body {
+  padding: 20px 16px;
+}
+#dialog-modal-message {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-color);
+  text-align: center;
+  white-space: pre-wrap; /* Allows line breaks in the message */
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+}
+
+/* --- Form Elements --- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"] {
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+/* RENAMED: from .user-checklist to .checklist-container for reusability */
+.checklist-container {
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 8px;
+}
+.checklist-container .check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+}
+
+/* --- Footer --- */
+.app-footer {
+  padding: 16px; /* Simpler padding */
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-light);
+  border-top: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  display: flex;
+  /* MODIFIED: Back to simple centering */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* MODIFIED: Reduced gap */
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* REMOVED: .footer-actions styles are no longer needed */
+
+/* Container for attribution links */
+.footer-attribution {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.app-footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+.app-footer a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,125 @@
+{
+  "extName": {
+    "message": "ShareSquad for Notion"
+  },
+  "extDescription": {
+    "message": "Gestiona e inyecta 'squads' (grupos) de usuarios en el diálogo de compartir de Notion."
+  },
+  "openSidePanel": {
+    "message": "Abrir ShareSquad for Notion"
+  },
+  "sidePanelTitle": {
+    "message": "Gestor de Grupos"
+  },
+  "users": {
+    "message": "Usuarios"
+  },
+  "groups": {
+    "message": "Grupos"
+  },
+  "addUser": {
+    "message": "Añadir Usuario"
+  },
+  "addGroup": {
+    "message": "Añadir Grupo"
+  },
+  "email": {
+    "message": "Email"
+  },
+  "groupName": {
+    "message": "Nombre del grupo"
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "cancel": {
+    "message": "Cancelar"
+  },
+  "edit": {
+    "message": "Editar"
+  },
+  "delete": {
+    "message": "Eliminar"
+  },
+  "inject": {
+    "message": "Inyectar"
+  },
+  "createdBy": {
+    "message": "Creado con"
+  },
+  "by": {
+    "message": "por"
+  },
+  "modalEditUser": {
+    "message": "Editar Usuario"
+  },
+  "modalAddUser": {
+    "message": "Añadir Nuevo Usuario"
+  },
+  "modalEditGroup": {
+    "message": "Editar Grupo"
+  },
+  "modalAddGroup": {
+    "message": "Añadir Nuevo Grupo"
+  },
+  "members": {
+    "message": "Miembros"
+  },
+  "noUsers": {
+    "message": "Aún no hay usuarios añadidos."
+  },
+  "noGroups": {
+    "message": "Aún no hay grupos definidos."
+  },
+  "deleteConfirm": {
+    "message": "¿Estás seguro de que quieres eliminar esto?"
+  },
+  "langAuto": {
+    "message": "Automático"
+  },
+  "langEN": {
+    "message": "Inglés"
+  },
+  "langES": {
+    "message": "Español"
+  },
+  "notificationTitle": {
+    "message": "ShareSquad for Notion"
+  },
+  "notificationMessage": {
+    "message": "Esta extensión solo funciona en páginas de notion.so. Por favor, abre Notion para usarla."
+  },
+  "toggleUserTagsTitle": {
+    "message": "Mostrar etiquetas de grupo bajo cada usuario"
+  },
+  "toggleGroupTagsTitle": {
+    "message": "Mostrar etiquetas de miembro bajo cada grupo"
+  },
+  "importData": {
+    "message": "Importar"
+  },
+  "exportData": {
+    "message": "Exportar"
+  },
+  "importConfirm": {
+    "message": "¿Estás seguro? Esto sobrescribirá TODOS los datos actuales."
+  },
+  "importError": {
+    "message": "Archivo no válido. Por favor, selecciona un archivo JSON de ShareSquad válido."
+  },
+  "importSuccess": {
+    "message": "Datos importados con éxito."
+  },
+  "confirmTitle": {
+    "message": "Confirmar Acción"
+  },
+  "confirmYes": {
+    "message": "Sí"
+  },
+  "confirmNo": {
+    "message": "No"
+  },
+  "alertOK": {
+    "message": "Aceptar"
+  }
+}

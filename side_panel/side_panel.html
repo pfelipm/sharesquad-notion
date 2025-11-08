@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="sidePanelTitle">Group Manager</title>
+  <link rel="stylesheet" href="side_panel.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <h1 class="title" data-i18n="sidePanelTitle">Group Manager</h1>
+    <button id="lang-toggle-btn" class="lang-toggle" title="Change language">🌐</button>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-container">
+
+    <!-- Users Section -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2 data-i18n="users">Users</h2>
+          <input type="checkbox" id="toggle-user-tags" class="view-toggle" data-i18n-title="toggleUserTagsTitle" title="Show group tags">
+        </div>
+        <button class="button primary small" id="add-user-btn" data-i18n="addUser">+ Add User</button>
+      </div>
+      <ul id="user-list" class="item-list">
+        <!-- User items will be injected here -->
+        <!-- Example:
+        <li class="item" data-id="u1">
+          <span>pablo.felip@example.com</span>
+          <div class="item-actions">
+            <button class="button icon edit" data-i18n-title="edit">✏️</button>
+            <button class="button icon delete" data-i18n-title="delete">🗑️</button>
+          </div>
+        </li>
+        -->
+      </ul>
+      <p id="no-users-msg" class="empty-state" data-i18n="noUsers">No users added yet.</p>
+    </section>
+
+    <!-- Groups Section -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title-group">
+          <h2 data-i18n="groups">Groups</h2>
+          <input type="checkbox" id="toggle-group-tags" class="view-toggle" data-i18n-title="toggleGroupTagsTitle" title="Show member tags">
+        </div>
+        <button class="button primary small" id="add-group-btn" data-i18n="addGroup">+ Add Group</button>
+      </div>
+      <ul id="group-list" class="item-list">
+        <!-- Group items will be injected here -->
+        <!-- Example:
+        <li class="item" data-id="g1">
+          <div class="item-main">
+            <span>Claustro</span>
+            <div class="tags">
+              <span class="tag">pablo.felip@...</span>
+              <span class="tag">+2 more</span>
+            </div>
+          </div>
+          <div class="item-actions">
+            <button class="button success inject" data-i18n-title="inject">➤</button>
+            <button class="button icon edit" data-i18n-title="edit">✏️</button>
+            <button class="button icon delete" data-i18n-title="delete">🗑️</button>
+          </div>
+        </li>
+        -->
+      </ul>
+      <p id="no-groups-msg" class="empty-state" data-i18n="noGroups">No groups defined yet.</p>
+    </section>
+
+    <!-- NEW: Data actions section (MOVED FROM FOOTER) -->
+    <section class="data-actions">
+      <button class="button secondary small" id="import-btn" data-i18n="importData">Import</button>
+      <button class="button secondary small" id="export-btn" data-i18n="exportData">Export</button>
+    </section>
+
+  </main>
+
+  <!-- App Footer (NOW ONLY ATTRIBUTION) -->
+  <footer class="app-footer">
+    <!-- REMOVED: footer-actions div -->
+    <div class="footer-attribution">
+      <span data-i18n="createdBy">Created with</span>
+      <span>💙</span>
+      <span data-i18n="by">by</span>
+      <a href="https://www.linkedin.com/in/pfelipm/" target="_blank" rel="noopener noreferrer">Pablo Felip</a>
+      <span>|</span>
+      <a href="https://github.com/pfelipm/sharesquad-notion" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </footer>
+
+  <!-- Modal for Add/Edit -->
+  <div id="modal-backdrop" class="modal-backdrop" style="display: none;">
+    <div class="modal-content">
+      <h3 id="modal-title" data-i18n="modalAddUser">Add New User</h3>
+      <div id="modal-body">
+        <!-- Form content will be injected here -->
+      </div>
+      <div class="modal-actions">
+        <button class="button secondary" id="modal-cancel-btn" data-i18n="cancel">Cancel</button>
+        <button class="button primary" id="modal-save-btn" data-i18n="save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW: Dialog Modal (for Confirm/Alert) -->
+  <div id="dialog-modal-backdrop" class="modal-backdrop" style="display: none;">
+    <div class="modal-content">
+      <h3 id="dialog-modal-title" data-i18n="confirmTitle">Confirm Action</h3>
+      <div id="dialog-modal-body">
+        <p id="dialog-modal-message"></p>
+      </div>
+      <div class="modal-actions">
+        <!-- Buttons are toggled via JS -->
+        <button class="button secondary" id="dialog-modal-no" data-i18n="confirmNo">No</button>
+        <button class="button primary" id="dialog-modal-yes" data-i18n="confirmYes">Yes</button>
+        <button class="button primary" id="dialog-modal-ok" data-i18n="alertOK">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden file input for import -->
+  <input type="file" id="import-file-input" accept=".json" style="display: none;">
+
+  <!-- Main JS File -->
+  <script src="side_panel.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+{
+  "extName": {
+    "message": "ShareSquad for Notion"
+  },
+  "extDescription": {
+    "message": "Manage and inject user squads (groups) into Notion's share dialog."
+  },
+  "openSidePanel": {
+    "message": "Open ShareSquad for Notion"
+  },
+  "sidePanelTitle": {
+    "message": "Group Manager"
+  },
+  "users": {
+    "message": "Users"
+  },
+  "groups": {
+    "message": "Groups"
+  },
+  "addUser": {
+    "message": "Add User"
+  },
+  "addGroup": {
+    "message": "Add Group"
+  },
+  "email": {
+    "message": "Email"
+  },
+  "groupName": {
+    "message": "Group name"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "edit": {
+    "message": "Edit"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "inject": {
+    "message": "Inject"
+  },
+  "createdBy": {
+    "message": "Created with"
+  },
+  "by": {
+    "message": "by"
+  },
+  "modalEditUser": {
+    "message": "Edit User"
+  },
+  "modalAddUser": {
+    "message": "Add New User"
+  },
+  "modalEditGroup": {
+    "message": "Edit Group"
+  },
+  "modalAddGroup": {
+    "message": "Add New Group"
+  },
+  "members": {
+    "message": "Members"
+  },
+  "noUsers": {
+    "message": "No users added yet."
+  },
+  "noGroups": {
+    "message": "No groups defined yet."
+  },
+  "deleteConfirm": {
+    "message": "Are you sure you want to delete this?"
+  },
+  "langAuto": {
+    "message": "Auto"
+  },
+  "langEN": {
+    "message": "English"
+  },
+  "langES": {
+    "message": "Spanish"
+  },
+  "notificationTitle": {
+    "message": "ShareSquad for Notion"
+  },
+  "notificationMessage": {
+    "message": "This extension only works on notion.so pages. Please navigate to Notion to use it."
+  },
+  "toggleUserTagsTitle": {
+    "message": "Show group tags under each user"
+  },
+  "toggleGroupTagsTitle": {
+    "message": "Show member tags under each group"
+  },
+  "importData": {
+    "message": "Import"
+  },
+  "exportData": {
+    "message": "Export"
+  },
+  "importConfirm": {
+    "message": "Are you sure you want to import? This will overwrite ALL current data."
+  },
+  "importError": {
+    "message": "Invalid File. Please select a valid ShareSquad JSON backup file."
+  },
+  "importSuccess": {
+    "message": "Data imported successfully."
+  },
+  "confirmTitle": {
+    "message": "Confirm Action"
+  },
+  "confirmYes": {
+    "message": "Yes"
+  },
+  "confirmNo": {
+    "message": "No"
+  },
+  "alertOK": {
+    "message": "OK"
+  }
+}
