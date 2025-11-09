@@ -51,6 +51,7 @@ This is the new experimental feature that automates part of the process.
 ## Technical Details
 
 *   **Architecture:** The extension uses **Manifest V3**, with a background *Service Worker* and the *Side Panel* API.
+*   **Lightweight and Fast:** Built with pure HTML, CSS, and JavaScript, without heavy frameworks, for optimal performance.
 *   **Storage:** Data is securely stored using `chrome.storage.sync`.
 *   **Required Permissions:**
     *   `tabs`: To verify that you are on a Notion page.

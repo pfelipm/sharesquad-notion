@@ -51,6 +51,7 @@ Esta es la nueva función experimental, que automatiza parte del proceso.
 ## Detalles Técnicos
 
 *   **Arquitectura:** La extensión utiliza **Manifest V3**, con un *Service Worker* en segundo plano y la API de *Side Panel*.
+*   **Ligera y rápida:** Construida con HTML, CSS y JavaScript puros, sin frameworks pesados, para un rendimiento óptimo.
 *   **Almacenamiento:** Los datos se almacenan de forma segura utilizando `chrome.storage.sync`.
 *   **Permisos Requeridos:**
     *   `tabs`: Para verificar que te encuentras en una página de Notion.
