@@ -70,10 +70,8 @@ Al ser una versión en desarrollo, la instalación se realiza de forma manual:
 
 ## Créditos y Contribuciones
 
-Desarrollado por **pfelipm**.
-
-Si encuentras un error o tienes una idea, por favor, abre un "Issue" en el repositorio de GitHub.
+Este proyecto ha sido creado y es mantenido por **[Pablo Felip](https://www.linkedin.com/in/pfelipm/)**.
 
 ## Licencia
 
-Este proyecto está bajo la Licencia MIT.
+Este proyecto se distribuye bajo los términos del archivo [LICENSE](/LICENSE).
