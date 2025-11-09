@@ -59,7 +59,7 @@ This is the new experimental feature that automates part of the process.
 
 ## Installation (Developer Mode)
 
-As this is a development version, it must be installed manually:
+As this is an experimental extension, it must be installed manually:
 
 1.  **Download the Repository:** Click the `Code` > `Download ZIP` button.
 2.  **Unzip the File:** Extract the ZIP file's contents to a permanent folder on your computer.
