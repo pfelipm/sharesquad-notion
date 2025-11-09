@@ -65,7 +65,7 @@ As this is an experimental extension, it must be installed manually:
 2.  **Unzip the File:** Extract the ZIP file's contents to a permanent folder on your computer.
 3.  **Open Chrome Extensions:** Go to `chrome://extensions`.
 4.  **Enable Developer Mode:** Activate the switch in the top-right corner.
-5.  **Load the Extension:** Click "Load unpacked" and select the folder where you extracted the files.
+5.  **Load the Extension:** Click "Load unpacked" and select the `extension-package` folder located inside the folder where you extracted the files.
 6.  **Done!** The extension will appear in your list, ready to use on `notion.so`.
 
 ## Credits and Contributions

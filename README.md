@@ -65,7 +65,7 @@ Al ser una extensión experiemental, la instalación se realiza de forma manual:
 2.  **Descomprime el Archivo:** Extrae el contenido del ZIP en una carpeta permanente en tu ordenador.
 3.  **Abre las Extensiones de Chrome:** Ve a `chrome://extensions`.
 4.  **Activa el Modo Desarrollador:** Activa el interruptor en la esquina superior derecha.
-5.  **Carga la Extensión:** Haz clic en "Cargar descomprimida" y selecciona la carpeta que extrajiste.
+5.  **Carga la Extensión:** Haz clic en "Cargar descomprimida" y selecciona la carpeta `extension-package` que se encuentra dentro de la carpeta que extrajiste.
 6.  **¡Listo!** La extensión aparecerá en tu lista, lista para usar en `notion.so`.
 
 ## Créditos y Contribuciones
