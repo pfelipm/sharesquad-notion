@@ -17,7 +17,7 @@
       <div class="card-header">
         <div class="card-title-group">
           <h2 data-i18n="users">Users</h2>
-          <input type="checkbox" id="toggle-user-tags" class="view-toggle" data-i18n-title="toggleUserTags" title="Show group names" checked>
+          <input type="checkbox" id="toggle-user-tags" class="view-toggle" data-i18n-title="toggleUserTagsTooltip" title="Show group names" checked>
         </div>
         <button id="add-user-btn" class="button primary" data-i18n="addUser">Add User</button>
       </div>
@@ -29,7 +29,7 @@
       <div class="card-header">
         <div class="card-title-group">
           <h2 data-i18n="groups">Groups</h2>
-          <input type="checkbox" id="toggle-group-tags" class="view-toggle" data-i18n-title="toggleGroupTags" title="Show member emails" checked>
+          <input type="checkbox" id="toggle-group-tags" class="view-toggle" data-i18n-title="toggleGroupTagsTooltip" title="Show member emails" checked>
         </div>
         <button id="add-group-btn" class="button primary" data-i18n="addGroup">Add Group</button>
       </div>
@@ -41,9 +41,9 @@
     <section class="data-actions experimental-section">
       <div class="experimental-toggle">
         <input type="checkbox" id="toggle-experimental">
-        <label for="toggle-experimental" data-i18n="experimentalMode" data-i18n-title="experimentalModeTitle">Enable experimental mode</label>
+        <label for="toggle-experimental" data-i18n="experimentalMode" data-i18n-title="experimentalModeTooltip">Enable experimental mode</label>
       </div>
-      <button id="sync-permissions-btn" class="button" data-i18n="syncPermissions" data-i18n-title="syncPermissionsTitle" style="display: none;">⇅ Sync Permissions</button>
+      <button id="sync-permissions-btn" class="button" data-i18n="syncPermissions" data-i18n-title="syncPermissionsTooltip" style="display: none;">⇅ Sync Permissions</button>
     </section>
 
     <!-- Data Actions Section -->
@@ -87,14 +87,14 @@
         <div id="sync-warning-extra" style="display: none;">
           <label class="check-item">
             <input type="checkbox" id="sync-warning-dont-show">
-            <span data-i18n="syncWarningDontShowAgain"></span>
+            <span data-i18n="syncWarningDontShow"></span>
           </label>
         </div>
       </div>
       <div class="modal-actions">
         <button id="dialog-btn-no" class="button secondary" data-i18n="dialogNo">No</button>
         <button id="dialog-btn-yes" class="button primary" data-i18n="dialogYes">Yes</button>
-        <button id="dialog-btn-ok" class="button primary" data-i18n="dialogOK">OK</button>
+        <button id="dialog-btn-ok" class="button primary" data-i18n="dialogOk">OK</button>
       </div>
     </div>
   </div>
@@ -102,25 +102,28 @@
   <!-- NEW: Sync Modal -->
   <div id="sync-modal" class="modal-backdrop" style="display: none;">
     <div class="modal-content">
-      <h3 id="sync-modal-title" data-i18n="syncModalTitle">Sync Permissions</h3>
+      <h3 id="sync-modal-title" data-i18n="syncModalTitle"></h3>
       <div id="sync-modal-body">
         <div class="form-group">
-          <label for="sync-permission-select" data-i18n="syncModalPermission">Permission to apply</label>
+          <!-- CORREGIDO: Clave de i18n y texto de placeholder eliminado -->
+          <label for="sync-permission-select" data-i18n="syncPermissionToApply"></label>
           <select id="sync-permission-select">
-            <option value="full" data-i18n="syncModalFullAccess">Full access</option>
-            <option value="edit" data-i18n="syncModalCanEdit">Can edit</option>
-            <option value="comment" data-i18n="syncModalCanComment">Can comment</option>
-            <option value="view" data-i18n="syncModalCanView">Can view</option>
+            <option value="full" data-i18n="syncPermissionFull">Full access</option>
+            <option value="edit" data-i18n="syncPermissionEdit">Can edit</option>
+            <option value="comment" data-i18n="syncPermissionComment">Can comment</option>
+            <option value="view" data-i18n="syncPermissionView">Can view</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label data-i18n="syncModalSelectGroups">Groups to sync</label>
+          <!-- CORREGIDO: Clave de i18n y texto de placeholder eliminado -->
+          <label data-i18n="syncGroupsTitle"></label>
           <div id="sync-group-list" class="checklist-container"></div>
         </div>
 
         <div class="form-group">
-          <label data-i18n="syncModalSelectUsers">Users to sync</label>
+          <!-- CORREGIDO: Clave de i18n y texto de placeholder eliminado -->
+          <label data-i18n="syncUsersTitle"></label>
           <div id="sync-user-list" class="checklist-container"></div>
         </div>
       </div>
