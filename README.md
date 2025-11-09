@@ -59,7 +59,7 @@ Esta es la nueva función experimental, que automatiza parte del proceso.
 
 ## Instalación (Modo Desarrollador)
 
-Al ser una versión en desarrollo, la instalación se realiza de forma manual:
+Al ser una extensión experiemental, la instalación se realiza de forma manual:
 
 1.  **Descarga el Repositorio:** Haz clic en `Code` > `Download ZIP`.
 2.  **Descomprime el Archivo:** Extrae el contenido del ZIP en una carpeta permanente en tu ordenador.
