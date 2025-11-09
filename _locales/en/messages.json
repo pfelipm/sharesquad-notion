@@ -1,125 +1,65 @@
 {
-  "extName": {
-    "message": "ShareSquad for Notion"
-  },
-  "extDescription": {
-    "message": "Manage and inject user squads (groups) into Notion's share dialog."
-  },
-  "openSidePanel": {
-    "message": "Open ShareSquad for Notion"
-  },
-  "sidePanelTitle": {
-    "message": "Group Manager"
-  },
-  "users": {
-    "message": "Users"
-  },
-  "groups": {
-    "message": "Groups"
-  },
-  "addUser": {
-    "message": "Add User"
-  },
-  "addGroup": {
-    "message": "Add Group"
-  },
-  "email": {
-    "message": "Email"
-  },
-  "groupName": {
-    "message": "Group name"
-  },
-  "save": {
-    "message": "Save"
-  },
-  "cancel": {
-    "message": "Cancel"
-  },
-  "edit": {
-    "message": "Edit"
-  },
-  "delete": {
-    "message": "Delete"
-  },
-  "inject": {
-    "message": "Inject"
-  },
-  "createdBy": {
-    "message": "Created with"
-  },
-  "by": {
-    "message": "by"
-  },
-  "modalEditUser": {
-    "message": "Edit User"
-  },
-  "modalAddUser": {
-    "message": "Add New User"
-  },
-  "modalEditGroup": {
-    "message": "Edit Group"
-  },
-  "modalAddGroup": {
-    "message": "Add New Group"
-  },
-  "members": {
-    "message": "Members"
-  },
-  "noUsers": {
-    "message": "No users added yet."
-  },
-  "noGroups": {
-    "message": "No groups defined yet."
-  },
-  "deleteConfirm": {
-    "message": "Are you sure you want to delete this?"
-  },
-  "langAuto": {
-    "message": "Auto"
-  },
-  "langEN": {
-    "message": "English"
-  },
-  "langES": {
-    "message": "Spanish"
-  },
-  "notificationTitle": {
-    "message": "ShareSquad for Notion"
-  },
-  "notificationMessage": {
-    "message": "This extension only works on notion.so pages. Please navigate to Notion to use it."
-  },
-  "toggleUserTagsTitle": {
-    "message": "Show group tags under each user"
-  },
-  "toggleGroupTagsTitle": {
-    "message": "Show member tags under each group"
-  },
-  "importData": {
-    "message": "Import"
-  },
-  "exportData": {
-    "message": "Export"
-  },
-  "importConfirm": {
-    "message": "Are you sure you want to import? This will overwrite ALL current data."
-  },
-  "importError": {
-    "message": "Invalid File. Please select a valid ShareSquad JSON backup file."
-  },
-  "importSuccess": {
-    "message": "Data imported successfully."
-  },
-  "confirmTitle": {
-    "message": "Confirm Action"
-  },
-  "confirmYes": {
-    "message": "Yes"
-  },
-  "confirmNo": {
-    "message": "No"
-  },
-  "alertOK": {
-    "message": "OK"
-  }
+  "appName": { "message": "ShareSquad for Notion" },
+  "appDescription": { "message": "Manage and inject user groups into Notion's share menu." },
+  "users": { "message": "Users" },
+  "addUser": { "message": "Add User" },
+  "editUser": { "message": "Edit User" },
+  "noUsers": { "message": "No users added yet." },
+  "groups": { "message": "Groups" },
+  "addGroup": { "message": "Add Group" },
+  "editGroup": { "message": "Edit Group" },
+  "noGroups": { "message": "No groups created yet." },
+  "email": { "message": "Email" },
+  "groupName": { "message": "Group name" },
+  "members": { "message": "Members" },
+  "cancel": { "message": "Cancel" },
+  "save": { "message": "Save" },
+  "edit": { "message": "Edit" },
+  "delete": { "message": "Delete" },
+  "inject": { "message": "Inject" },
+  "deleteConfirmTitle": { "message": "Confirm Deletion" },
+  "deleteConfirmMessageUser": { "message": "Are you sure you want to delete this user? This will also remove them from all groups." },
+  "deleteConfirmMessageGroup": { "message": "Are you sure you want to delete this group? Users will not be deleted." },
+  "langToggleAuto": { "message": "Language: Auto" },
+  "langToggleEN": { "message": "Language: English" },
+  "langToggleES": { "message": "Language: Spanish" },
+  "toggleUserTagsTooltip": { "message": "Show/hide group tags for users" },
+  "toggleGroupTagsTooltip": { "message": "Show/hide member tags for groups" },
+  "import": { "message": "Import" },
+  "export": { "message": "Export" },
+  "importConfirmTitle": { "message": "Import Data" },
+  "importConfirmMessage": { "message": "This will overwrite ALL current users and groups. Are you sure?" },
+  "importSuccessTitle": { "message": "Success" },
+  "importSuccess": { "message": "Data imported successfully." },
+  "importErrorTitle": { "message": "Import Error" },
+  "importErrorInvalidFile": { "message": "Invalid file structure. The file must be a JSON containing 'users' and 'groups' arrays." },
+  "dialogYes": { "message": "Yes" },
+  "dialogNo": { "message": "No" },
+  "dialogOk": { "message": "OK" },
+  "experimentalMode": { "message": "Enable experimental mode" },
+  "experimentalModeTooltip": { "message": "WARNING: This enables experimental features that read and interact with the Notion DOM. They may break if Notion updates its interface." },
+  "syncPermissions": { "message": "Sync Permissions" },
+  "syncPermissionsTooltip": { "message": "Sync permissions for selected items" },
+  "syncModalTitle": { "message": "Sync Permissions" },
+  "syncPermissionToApply": { "message": "Permission to apply" },
+  "syncPermissionFull": { "message": "Full access" },
+  "syncPermissionEdit": { "message": "Can edit" },
+  "syncPermissionComment": { "message": "Can comment" },
+  "syncPermissionView": { "message": "Can view" },
+  "syncGroupsTitle": { "message": "Groups to sync" },
+  "syncUsersTitle": { "message": "Users to sync" },
+  "syncModalApply": { "message": "Apply Sync" },
+  "syncErrorTitle": { "message": "Sync Error" },
+  "syncSuccessTitle": { "message": "Success" },
+  "syncSuccessMessage": { "message": "Sync process initiated. The bot is now working." },
+  "syncWarningTitle": { "message": "Experimental Mode Guide" },
+  "syncWarningMessage": { "message": "You've enabled experimental mode!\n\nTo use [⇅ Sync Permissions]:\n\n1. Open the \"Share\" pop-up on a Notion page.\n2. Click \"⇅ Sync Permissions\".\n3. Select the groups/users and the permission to apply." },
+  "syncWarningDontShow": { "message": "Don't show this again" },
+  "notificationTitle": { "message": "ShareSquad for Notion" },
+  "notificationMessage": { "message": "This extension only works on notion.so pages." },
+  "emailPlaceholder": { "message": "name@example.com" },
+  "groupPlaceholder": { "message": "e.g., Faculty" },
+  "syncErrorShareMenu": { "message": "Could not find Notion share menu. Please make sure the \"Share\" pop-up is open." },
+  "syncErrorInput": { "message": "Could not find the email input field to invite new users." },
+  "syncErrorInviteBtn": { "message": "Could not find the 'Invite' button. The bot may have been interrupted." }
 }

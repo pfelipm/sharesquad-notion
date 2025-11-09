@@ -274,18 +274,12 @@ body {
   flex-direction: column;
 }
 
-/* FIX: Changed selector from '.modal-content h3' to '#modal-title' 
-  to match the ID in the HTML and increase specificity.
-*/
 #modal-title {
   padding: 16px;
   font-size: 16px;
   border-bottom: 1px solid var(--border-color);
 }
 
-/* FIX: Changed selector from '.modal-body' to '#modal-body' 
-  to match the ID in the HTML. This was the main bug.
-*/
 #modal-body {
   padding-top: 16px;
   padding-bottom: 16px;
@@ -296,15 +290,11 @@ body {
   gap: 12px;
 }
 
-/* --- NEW CSS RULE --- */
-/* This was missing. We add the same padding/border as the main modal title */
 #dialog-modal-title {
   padding: 16px;
   font-size: 16px;
   border-bottom: 1px solid var(--border-color);
 }
-/* --- END NEW RULE --- */
-
 
 /* NEW: Styles for confirm/alert modal body */
 #dialog-modal-body {
@@ -315,7 +305,19 @@ body {
   line-height: 1.6;
   color: var(--text-color);
   text-align: center;
-  white-space: pre-wrap; /* Allows line breaks in the message */
+  white-space: pre-wrap; /* Allows line breaks \n in messages */
+}
+
+/* NEW: Style for the "Don't show again" checkbox label */
+#sync-warning-extra .check-item {
+  justify-content: center;
+  margin-top: 15px;
+  font-weight: normal;
+  color: var(--text-light);
+  font-size: 13px;
+}
+#sync-warning-extra .check-item input {
+   margin-top: -1px; /* Align checkbox */
 }
 
 .modal-actions {
@@ -340,19 +342,24 @@ body {
 }
 
 .form-group input[type="text"],
-.form-group input[type="email"] {
+.form-group input[type="email"],
+/* NEW: Add select to this rule */
+.form-group select {
   padding: 8px 10px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   font-size: 14px;
+  background-color: var(--card-bg); /* Ensure select has bg */
+  width: 100%; /* Make select full width */
 }
-.form-group input:focus {
+.form-group input:focus,
+/* NEW: Add select to this rule */
+.form-group select:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-/* RENAMED: from .user-checklist to .checklist-container for reusability */
 .checklist-container {
   max-height: 150px;
   overflow-y: auto;
@@ -369,23 +376,19 @@ body {
 
 /* --- Footer --- */
 .app-footer {
-  padding: 16px; /* Simpler padding */
+  padding: 16px;
   text-align: center;
   font-size: 12px;
   color: var(--text-light);
   border-top: 1px solid var(--border-color);
   background-color: var(--card-bg);
   display: flex;
-  /* MODIFIED: Back to simple centering */
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* MODIFIED: Reduced gap */
   gap: 4px;
   flex-shrink: 0;
 }
-
-/* REMOVED: .footer-actions styles are no longer needed */
 
 /* Container for attribution links */
 .footer-attribution {
@@ -401,4 +404,84 @@ body {
 }
 .app-footer a:hover {
   text-decoration: underline;
+}
+
+/* --- NEW: Fase 2 Styles (Added 2025-11-09) --- */
+
+/* Section for Experimental Toggle and Sync Button */
+.experimental-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-color); /* Slightly different background */
+}
+
+.experimental-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.experimental-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+}
+
+.experimental-toggle label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-light);
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+/* Sync Button */
+#sync-permissions-btn {
+  width: 100%;
+  padding: 8px 12px;
+  font-weight: 600;
+  /* Use success colors for this "action" button */
+  background-color: var(--success-color);
+  color: white;
+  border: none;
+}
+#sync-permissions-btn:hover {
+  background-color: var(--success-hover);
+}
+
+/* --- FIX: Added rule for Sync Modal Title --- */
+#sync-modal-title {
+  padding: 16px;
+  font-size: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Sync Modal Body */
+#sync-modal-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Label for dropdown and checklists */
+#sync-modal-body .form-group label {
+  font-weight: 500;
+  color: var(--text-light);
+  margin-bottom: 0; /* Override default */
+}
+
+/* Re-use checklist container style for sync lists */
+#sync-modal-body .checklist-container {
+  max-height: 120px; /* A bit shorter for this modal */
+}
+
+/* Ensure empty state text in modal checklists is respected */
+#sync-modal-body .checklist-container .empty-state {
+  padding: 10px 0;
 }

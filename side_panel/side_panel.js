@@ -7,44 +7,22 @@ let state = {
   groups: [], // { id: "g1", name: "...", userIds: ["u1"] }
   lang: 'auto', // 'auto', 'en', 'es'
   langStrings: {},
-  showUserGroupTags: true, // NEW
-  showGroupMemberTags: true // NEW
+  showUserGroupTags: true,
+  showGroupMemberTags: true,
+  experimentalMode: false,
+  hasSeenSyncWarning: false // NEW: For first-time warning
 };
 
 // --- CONSTANTS ---
 const LANG_TOGGLE_STATES = {
-  'auto': { next: 'en', emoji: '🌐', title: 'langAuto' },
-  'en': { next: 'es', emoji: '🇬🇧', title: 'langEN' },
-  'es': { next: 'auto', emoji: '🇪🇸', title: 'langES' }
+  'auto': { next: 'en', emoji: '🌐', title: 'langToggleAuto' },
+  'en': { next: 'es', emoji: '🇬🇧', title: 'langToggleEN' },
+  'es': { next: 'auto', emoji: '🇪🇸', title: 'langToggleES' }
 };
 
 // --- DOM SELECTORS ---
-const dom = {
-  userList: document.getElementById('user-list'),
-  groupList: document.getElementById('group-list'),
-  addUserBtn: document.getElementById('add-user-btn'),
-  addGroupBtn: document.getElementById('add-group-btn'),
-  noUsersMsg: document.getElementById('no-users-msg'),
-  noGroupsMsg: document.getElementById('no-groups-msg'),
-  modalBackdrop: document.getElementById('modal-backdrop'),
-  modalTitle: document.getElementById('modal-title'),
-  modalBody: document.getElementById('modal-body'),
-  modalCancelBtn: document.getElementById('modal-cancel-btn'),
-  modalSaveBtn: document.getElementById('modal-save-btn'),
-  langToggleBtn: document.getElementById('lang-toggle-btn'),
-  toggleUserTags: document.getElementById('toggle-user-tags'), // NEW
-  toggleGroupTags: document.getElementById('toggle-group-tags'), // NEW
-  importBtn: document.getElementById('import-btn'), // NEW
-  exportBtn: document.getElementById('export-btn'), // NEW
-  importFileInput: document.getElementById('import-file-input'), // NEW
-  // NEW: Dialog Modal Elements
-  dialogBackdrop: document.getElementById('dialog-modal-backdrop'),
-  dialogTitle: document.getElementById('dialog-modal-title'),
-  dialogMessage: document.getElementById('dialog-modal-message'),
-  dialogBtnOk: document.getElementById('dialog-modal-ok'),
-  dialogBtnNo: document.getElementById('dialog-modal-no'),
-  dialogBtnYes: document.getElementById('dialog-modal-yes')
-};
+// Declarar como objeto vacío. Lo poblaremos en DOMContentLoaded.
+const dom = {};
 
 // --- I18N (Localization) ---
 /**
@@ -127,16 +105,19 @@ function handleLangToggle() {
  */
 async function fetchData() {
   const syncData = await chrome.storage.sync.get([
-    'shareSquad_Users', 
+    'shareSquad_Users',
     'shareSquad_Groups',
-    'shareSquad_showUserGroupTags', // NEW
-    'shareSquad_showGroupMemberTags' // NEW
+    'shareSquad_showUserGroupTags',
+    'shareSquad_showGroupMemberTags',
+    'shareSquad_experimentalMode',
+    'shareSquad_hasSeenSyncWarning' // NEW: Load warning flag
   ]);
   state.users = syncData.shareSquad_Users || [];
   state.groups = syncData.shareSquad_Groups || [];
-  // Load view preferences, default to true
   state.showUserGroupTags = syncData.shareSquad_showUserGroupTags ?? true;
   state.showGroupMemberTags = syncData.shareSquad_showGroupMemberTags ?? true;
+  state.experimentalMode = syncData.shareSquad_experimentalMode ?? false;
+  state.hasSeenSyncWarning = syncData.shareSquad_hasSeenSyncWarning ?? false; // NEW: Init flag
 
   const localData = await chrome.storage.local.get('shareSquad_Lang');
   state.lang = localData.shareSquad_Lang || 'auto';
@@ -149,7 +130,7 @@ function saveData() {
   // A good place to sort before saving
   state.users.sort((a, b) => a.email.localeCompare(b.email));
   state.groups.sort((a, b) => a.name.localeCompare(b.name));
-  
+
   chrome.storage.sync.set({
     shareSquad_Users: state.users,
     shareSquad_Groups: state.groups
@@ -158,9 +139,22 @@ function saveData() {
   render();
 }
 
-// NEW: Function to save view preferences
+/**
+ * Saves a single view preference to sync storage
+ * @param {string} key The key to save
+ * @param {any} value The value to save
+ */
 function saveViewPreference(key, value) {
-  chrome.storage.sync.set({ [key]: value });
+  // MODIFIED: Added experimentalMode to the list of keys
+  const validKeys = [
+    'shareSquad_showUserGroupTags',
+    'shareSquad_showGroupMemberTags',
+    'shareSquad_experimentalMode',
+    'shareSquad_hasSeenSyncWarning' // NEW: Add warning flag
+  ];
+  if (validKeys.includes(key)) {
+    chrome.storage.sync.set({ [key]: value });
+  }
 }
 
 // --- RENDER (View) ---
@@ -173,6 +167,12 @@ function render() {
   // Set checkbox state
   dom.toggleUserTags.checked = state.showUserGroupTags;
   dom.toggleGroupTags.checked = state.showGroupMemberTags;
+
+  // --- NEW: Fase 2 Render Logic ---
+  dom.experimentalToggle.checked = state.experimentalMode;
+  dom.syncPermissionsBtn.style.display = state.experimentalMode ? 'inline-block' : 'none';
+  // --- END: Fase 2 Render Logic ---
+
   applyStrings(); // Re-apply strings in case of dynamic content
 }
 
@@ -195,14 +195,11 @@ function renderUserList() {
     li.className = 'item';
     li.dataset.id = user.id;
 
-    // --- NEW LOGIC ---
     // Find all groups this user belongs to
     const groups = state.groups.filter(group => group.userIds.includes(user.id));
     let tagsHtml = '';
-    // MODIFIED: Check preference state
     if (state.showUserGroupTags && groups.length > 0) {
       tagsHtml = `<div class="tags">`;
-      // Show first 2 groups, then "+X more" (same logic as group list)
       groups.slice(0, 2).forEach(group => {
         tagsHtml += `<span class="tag">${group.name}</span>`;
       });
@@ -211,19 +208,15 @@ function renderUserList() {
       }
       tagsHtml += `</div>`;
     }
-    // --- END NEW LOGIC ---
 
-    // --- UPDATED HTML STRUCTURE ---
-    // We now use <div class="item-main"> to stack email and tags
     li.innerHTML = `
       <div class="item-main">
         <span>${user.email}</span>
         ${tagsHtml}
       </div>
       <div class="item-actions">
-        <!-- NEW: Added inject button for individual user -->
-        <button class="button success inject" data-action="inject-user" data-i18n-title="inject" title="Inject">➤</button>
-        <button class="button icon edit" data-action="edit-user" data-i18n-title="edit" title="Edit">✏️</button>
+        <button class="button success small" data-action="inject-user" data-i18n-title="inject" title="Inject">➤</button>
+        <button class="button icon" data-action="edit-user" data-i18n-title="edit" title="Edit">✏️</button>
         <button class="button icon delete" data-action="delete-user" data-i18n-title="delete" title="Delete">🗑️</button>
       </div>
     `;
@@ -253,10 +246,8 @@ function renderGroupList() {
     // Build member tags
     const members = group.userIds.map(id => state.users.find(u => u.id === id)).filter(Boolean);
     let tagsHtml = '';
-    // MODIFIED: Check preference state
     if (state.showGroupMemberTags && members.length > 0) {
       tagsHtml = `<div class="tags">`;
-      // Show first 2 members, then "+X more"
       members.slice(0, 2).forEach(member => {
         tagsHtml += `<span class="tag">${member.email.split('@')[0]}...</span>`;
       });
@@ -272,8 +263,8 @@ function renderGroupList() {
         ${tagsHtml}
       </div>
       <div class="item-actions">
-        <button class="button success inject" data-action="inject-group" data-i18n-title="inject" title="Inject">➤</button>
-        <button class="button icon edit" data-action="edit-group" data-i18n-title="edit" title="Edit">✏️</button>
+        <button class="button success small" data-action="inject-group" data-i18n-title="inject" title="Inject">➤</button>
+        <button class="button icon" data-action="edit-group" data-i18n-title="edit" title="Edit">✏️</button>
         <button class="button icon delete" data-action="delete-group" data-i18n-title="delete" title="Delete">🗑️</button>
       </div>
     `;
@@ -296,27 +287,27 @@ function showModal(type, mode, id = null) {
 
   if (type === 'user') {
     const user = id ? state.users.find(u => u.id === id) : null;
-    titleKey = mode === 'add' ? 'modalAddUser' : 'modalEditUser';
+    titleKey = mode === 'add' ? 'addUser' : 'editUser';
 
-    // NEW: Build group checklist
+    // Build group checklist
     let groupChecklistHtml = '';
     if (state.groups.length > 0) {
-      groupChecklistHtml = state.groups.map(group => `
+      const sortedGroups = [...state.groups].sort((a,b) => a.name.localeCompare(b.name));
+      groupChecklistHtml = sortedGroups.map(group => `
         <label class="check-item">
           <input type="checkbox" data-groupid="${group.id}" ${user && group.userIds.includes(user.id) ? 'checked' : ''}>
           <span>${group.name}</span>
         </label>
       `).join('');
     } else {
-      groupChecklistHtml = `<p class="empty-state" data-i18n="noGroups" style="padding: 10px 0;">No groups defined yet.</p>`;
+      groupChecklistHtml = `<p class="empty-state" data-i18n="noGroups" style="padding: 10px 0;"></p>`;
     }
 
     bodyHtml = `
       <div class="form-group">
-        <label for="user-email" data-i18n="email">Email</label>
-        <input type="email" id="user-email" value="${user ? user.email : ''}" placeholder="name@example.com">
+        <label for="modal-input-email" data-i18n="email">Email</label>
+        <input type="email" id="modal-input-email" value="${user ? user.email : ''}" placeholder="${state.langStrings['emailPlaceholder'] || 'name@example.com'}">
       </div>
-      <!-- NEW: Added group checklist -->
       <div class="form-group">
         <label data-i18n="groups">Groups</label>
         <div class="checklist-container">${groupChecklistHtml}</div>
@@ -324,12 +315,13 @@ function showModal(type, mode, id = null) {
     `;
   } else if (type === 'group') {
     const group = id ? state.groups.find(g => g.id === id) : null;
-    titleKey = mode === 'add' ? 'modalAddGroup' : 'modalEditGroup';
+    titleKey = mode === 'add' ? 'addGroup' : 'editGroup';
 
     // Build user checklist
-    let userChecklistHtml = '<p class="empty-state" data-i18n="noUsers" style="padding: 10px 0;">No users added yet.</p>';
+    let userChecklistHtml = `<p class="empty-state" data-i18n="noUsers" style="padding: 10px 0;"></p>`;
     if (state.users.length > 0) {
-      userChecklistHtml = state.users.map(user => `
+      const sortedUsers = [...state.users].sort((a,b) => a.email.localeCompare(b.email));
+      userChecklistHtml = sortedUsers.map(user => `
         <label class="check-item">
           <input type="checkbox" data-userid="${user.id}" ${group && group.userIds.includes(user.id) ? 'checked' : ''}>
           <span>${user.email}</span>
@@ -339,12 +331,11 @@ function showModal(type, mode, id = null) {
 
     bodyHtml = `
       <div class="form-group">
-        <label for="group-name" data-i18n="groupName">Group name</label>
-        <input type="text" id="group-name" value="${group ? group.name : ''}" placeholder="e.g., Claustro">
+        <label for="modal-input-name" data-i18n="groupName">Group name</label>
+        <input type="text" id="modal-input-name" value="${group ? group.name : ''}" placeholder="${state.langStrings['groupPlaceholder'] || 'Faculty'}">
       </div>
       <div class="form-group">
         <label data-i18n="members">Members</label>
-        <!-- RENAMED: from user-checklist to checklist-container -->
         <div class="checklist-container">${userChecklistHtml}</div>
       </div>
     `;
@@ -365,23 +356,22 @@ function handleModalSave() {
   const { type, mode, id } = currentModal;
 
   if (type === 'user') {
-    const email = document.getElementById('user-email').value.trim();
-    if (!email) return; // Add validation later
-    
-    let userId = id; // Will be null for 'add' mode initially
+    const email = document.getElementById('modal-input-email').value.trim();
+    if (!email) return;
+
+    let userId = id;
 
     if (mode === 'add') {
       const newUser = { id: `u_${Date.now()}`, email };
       state.users.push(newUser);
-      userId = newUser.id; // Get the new ID
+      userId = newUser.id;
     } else if (mode === 'edit') {
       const user = state.users.find(u => u.id === id);
       if (user) user.email = email;
     }
 
-    // NEW: Update group memberships for this user
     if (userId) {
-      document.querySelectorAll('.checklist-container input[type="checkbox"]').forEach(input => {
+      document.querySelectorAll('#modal-body .checklist-container input[type="checkbox"]').forEach(input => {
         const groupId = input.dataset.groupid;
         const group = state.groups.find(g => g.id === groupId);
         if (!group) return;
@@ -389,21 +379,19 @@ function handleModalSave() {
         const userIsMember = group.userIds.includes(userId);
 
         if (input.checked && !userIsMember) {
-          // Add user to group
           group.userIds.push(userId);
         } else if (!input.checked && userIsMember) {
-          // Remove user from group
           group.userIds = group.userIds.filter(uid => uid !== userId);
         }
       });
     }
 
   } else if (type === 'group') {
-    const name = document.getElementById('group-name').value.trim();
-    if (!name) return; // Add validation
+    const name = document.getElementById('modal-input-name').value.trim();
+    if (!name) return;
 
     const selectedUserIds = [];
-    document.querySelectorAll('.checklist-container input[type="checkbox"]:checked').forEach(input => {
+    document.querySelectorAll('#modal-body .checklist-container input[type="checkbox"]:checked').forEach(input => {
       selectedUserIds.push(input.dataset.userid);
     });
 
@@ -424,9 +412,10 @@ function handleModalSave() {
 
 // --- ACTIONS (Controller) ---
 
-// --- NEW: Custom Dialog Modal ---
+// --- Custom Dialog Modal ---
 let currentDialog = {
-  onConfirm: null
+  onConfirm: null,
+  isSyncWarning: false // NEW: Flag for sync warning
 };
 
 /**
@@ -435,42 +424,62 @@ let currentDialog = {
  * @param {string} titleKey The i18n key for the title
  * @param {'alert'|'confirm'} type The type of dialog
  * @param {function | null} onConfirm A callback function to run if "Yes" is clicked
+ * @param {object} options - Optional flags (e.g., { showDontShowAgain: true })
  */
-function showDialog(message, titleKey = 'confirmTitle', type = 'alert', onConfirm = null) {
+function showDialog(message, titleKey = 'importConfirmTitle', type = 'alert', onConfirm = null, options = {}) {
   dom.dialogMessage.textContent = message;
   dom.dialogTitle.dataset.i18n = titleKey;
-  applyStrings(); // Apply the title
-
   currentDialog.onConfirm = onConfirm;
+  currentDialog.isSyncWarning = options.showDontShowAgain || false; // NEW: Set flag
 
-  if (type === 'confirm') {
-    dom.dialogBtnOk.style.display = 'none';
-    dom.dialogBtnNo.style.display = 'inline-block';
-    dom.dialogBtnYes.style.display = 'inline-block';
-  } else { // 'alert'
-    dom.dialogBtnOk.style.display = 'inline-block';
+  if (type === 'alert') {
     dom.dialogBtnNo.style.display = 'none';
     dom.dialogBtnYes.style.display = 'none';
+    dom.dialogBtnOk.style.display = 'inline-block';
+  } else if (type === 'confirm') {
+    dom.dialogBtnNo.style.display = 'inline-block';
+    dom.dialogBtnYes.style.display = 'inline-block';
+    dom.dialogBtnOk.style.display = 'none';
   }
+
+  // NEW: Show/hide the "Don't show again" checkbox
+  if (currentDialog.isSyncWarning) {
+    dom.syncWarningExtra.style.display = 'block';
+    dom.syncWarningDontShow.checked = false;
+  } else {
+    dom.syncWarningExtra.style.display = 'none';
+  }
+
+  applyStrings(); // Apply title string and new checkbox string
   dom.dialogBackdrop.style.display = 'flex';
 }
 
 function hideDialog() {
   dom.dialogBackdrop.style.display = 'none';
   currentDialog.onConfirm = null;
+  currentDialog.isSyncWarning = false; // NEW: Reset flag
+}
+
+/**
+ * NEW: Handle OK click to check for "Don't show again"
+ */
+function handleDialogOk() {
+  if (currentDialog.isSyncWarning && dom.syncWarningDontShow.checked) {
+    state.hasSeenSyncWarning = true;
+    saveViewPreference('shareSquad_hasSeenSyncWarning', true);
+  }
+  hideDialog();
 }
 // --- END: Custom Dialog Modal ---
 
 
 function handleDelete(type, id) {
-  const confirmKey = 'deleteConfirm';
-  const confirmMsg = state.langStrings[confirmKey] || 'Are you sure you want to delete this?';
-  
-  // MODIFIED: Use custom dialog
-  showDialog(confirmMsg, 'delete', 'confirm', () => {
+  const titleKey = (type === 'user') ? 'deleteConfirmMessageUser' : 'deleteConfirmMessageGroup';
+  const confirmMsg = state.langStrings[titleKey] || 'Are you sure you want to delete this?';
+
+  showDialog(confirmMsg, 'deleteConfirmTitle', 'confirm', () => {
     if (type === 'user') {
       state.users = state.users.filter(u => u.id !== id);
-      // Also remove this user from all groups
       state.groups.forEach(group => {
         group.userIds = group.userIds.filter(uid => uid !== id);
       });
@@ -481,45 +490,33 @@ function handleDelete(type, id) {
   });
 }
 
-// --- NEW: IMPORT/EXPORT ---
+// --- IMPORT/EXPORT ---
 
-/**
- * Handles the Export button click
- */
 function handleExport() {
-  // We only export users and groups. Preferences are local.
   const data = {
     users: state.users,
     groups: state.groups
   };
-  
-  const jsonString = JSON.stringify(data, null, 2); // Pretty-print JSON
+
+  const jsonString = JSON.stringify(data, null, 2);
   const blob = new Blob([jsonString], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  
+
   const a = document.createElement('a');
   a.href = url;
   a.download = `sharesquad_backup_${new Date().toISOString().split('T')[0]}.json`;
-  
+
   document.body.appendChild(a);
-  a.click(); // Trigger download
-  
-  // Clean up
+  a.click();
+
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
-/**
- * Handles the Import button click
- */
 function handleImportClick() {
-  // Trigger the hidden file input
   dom.importFileInput.click();
 }
 
-/**
- * Handles the file selection from the hidden input
- */
 function handleFileSelected(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -530,59 +527,80 @@ function handleFileSelected(event) {
       const content = e.target.result;
       const data = JSON.parse(content);
 
-      // Validate the imported data structure
       if (!data || !Array.isArray(data.users) || !Array.isArray(data.groups)) {
-        throw new Error('Invalid data structure');
+        throw new Error(state.langStrings['importErrorInvalidFile'] || 'Invalid file structure.');
       }
 
-      // Ask for confirmation
-      const confirmKey = 'importConfirm';
-      const confirmMsg = state.langStrings[confirmKey] || 'Are you sure? This will overwrite ALL current data.';
-      
-      // MODIFIED: Use custom dialog
-      showDialog(confirmMsg, 'importData', 'confirm', () => {
-        // Validation passed and confirmed. Overwrite state.
-        state.users = data.users;
-        state.groups = data.groups;
-        saveData(); // This will save and re-render
-        
-        const successKey = 'importSuccess';
-        const successMsg = state.langStrings[successKey] || 'Data imported successfully.';
-        // MODIFIED: Use custom dialog
-        showDialog(successMsg, 'importData', 'alert');
-      });
+      showDialog(
+        state.langStrings['importConfirmMessage'] || 'Overwrite all data?',
+        'importConfirmTitle',
+        'confirm',
+        () => {
+          state.users = data.users;
+          state.groups = data.groups;
+          saveData();
+          showDialog(state.langStrings['importSuccess'] || 'Import successful.', 'importSuccessTitle', 'alert');
+        }
+      );
 
     } catch (error) {
       console.error('Import failed:', error);
-      const errorKey = 'importError';
-      const errorMsg = state.langStrings[errorKey] || 'Invalid File. Please select a valid ShareSquad JSON backup file.';
-      // MODIFIED: Use custom dialog
-      showDialog(errorMsg, 'importError', 'alert');
+      showDialog(error.message, 'importErrorTitle', 'alert');
     } finally {
-      // Reset the file input to allow importing the same file again
       event.target.value = null;
     }
   };
-  
+
   reader.readAsText(file);
 }
 
 // --- END: IMPORT/EXPORT ---
 
-// MODIFIED: Renamed to handle both group and user injects
+/**
+ * Helper to get the active Notion tab
+ * @returns {Promise<chrome.tabs.Tab | null>}
+ */
+async function getActiveNotionTab() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+
+    if (tab && tab.url && tab.url.startsWith('https://www.notion.so/')) {
+      return tab;
+    }
+
+    // CORREGIDO: Usar la clave de error del bot, que ahora está en i18n
+    showDialog(state.langStrings['syncErrorShareMenu'] || 'Could not find Notion share menu. Please make sure the "Share" pop-up is open.', 'syncErrorTitle', 'alert');
+    return null;
+  } catch(e) {
+    console.error("Error getting active tab:", e);
+    showDialog(e.message, 'syncErrorTitle', 'alert');
+    return null;
+  }
+}
+
+
+/**
+ * Base function to inject a list of emails
+ * @param {string} emailList - A comma-separated string of emails
+ */
 async function handleInject(emailList) {
   if (!emailList) return;
 
-  // Get current Notion tab
+  // MODIFICADO: No necesitamos la pestaña aquí, la función de inyección la encontrará.
+  // La función `injectEmailsToNotion` se ejecutará en la pestaña activa.
+  // Necesitamos asegurarnos de que el usuario está en Notion.
+
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  if (!tab || !tab.url.includes('notion.so')) {
-    console.warn('Not on a Notion tab.');
-    // We shouldn't hit this if host_permissions and sidePanel logic are correct,
-    // but it's good practice.
-    return;
+  if (!tab || !tab.url || !tab.url.startsWith('https://www.notion.so/')) {
+    // Si no estamos en Notion, mostramos la notificación (desde background.js)
+    // Pero aquí podemos mostrar un diálogo si el panel ya está abierto.
+    // ... No, es mejor dejar que background.js lo maneje.
+    // Solo inyectamos si estamos en Notion.
+     showDialog(state.langStrings['notificationMessage'] || 'This extension only works on notion.so pages.', 'notificationTitle', 'alert');
+     return;
   }
 
-  // Inject the script
+
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
     function: injectEmailsToNotion,
@@ -590,7 +608,10 @@ async function handleInject(emailList) {
   });
 }
 
-// NEW: Handler for group inject button
+/**
+ * Handles click on a group inject button
+ * @param {string} groupId
+ */
 async function handleInjectGroup(groupId) {
   const group = state.groups.find(g => g.id === groupId);
   if (!group) return;
@@ -601,7 +622,10 @@ async function handleInjectGroup(groupId) {
   await handleInject(emailList);
 }
 
-// NEW: Handler for user inject button
+/**
+ * Handles click on a user inject button
+ * @param {string} userId
+ */
 async function handleInjectUser(userId) {
   const user = state.users.find(u => u.id === userId);
   if (!user) return;
@@ -616,42 +640,140 @@ async function handleInjectUser(userId) {
  */
 function injectEmailsToNotion(emailsToInject) {
   // Find the Notion input field. This is the "fragile" part.
-  // This selector targets the placeholder text in either language.
   const input = document.querySelector('input[placeholder*="Correo electrónico o grupo"], input[placeholder*="Email or group"]');
-  
+
   if (input) {
-    // --- NEW LOGIC TO APPEND AND DE-DUPLICATE ---
-    
-    // 1. Get current emails from the input, split by comma, trim, and filter out empty strings.
     const currentEmails = input.value
       .split(',')
       .map(email => email.trim())
       .filter(email => email.length > 0);
-      
-    // 2. Get new emails to inject, split, trim, filter.
+
     const newEmails = emailsToInject
       .split(',')
       .map(email => email.trim())
       .filter(email => email.length > 0);
-      
-    // 3. Combine both lists and de-duplicate using a Set.
+
     const combinedEmails = new Set([...currentEmails, ...newEmails]);
-    
-    // 4. Convert back to an array, join with ", ", and set as the new value.
+
     const finalEmailString = Array.from(combinedEmails).join(', ');
-    
+
     input.value = finalEmailString;
-    
-    // --- END NEW LOGIC ---
-    
-    // Dispatch events to make Notion's framework (React) recognize the change
+
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new Event('change', { bubbles: true }));
   } else {
     console.error('ShareSquad for Notion: Could not find the share input field.');
-    // We could send a message back to the side panel to show an error.
+    // No podemos devolver un error aquí que sea capturado por la UI
   }
 }
+
+// --- NEW: FASE 2 (Sync Permissions) ---
+
+function showSyncModal() {
+  // Sort and render groups
+  const sortedGroups = [...state.groups].sort((a, b) => a.name.localeCompare(b.name));
+  if (sortedGroups.length > 0) {
+    dom.syncModalGroupList.innerHTML = sortedGroups.map(group => `
+      <label class="check-item">
+        <input type="checkbox" data-groupid="${group.id}">
+        <span>${group.name}</span>
+      </label>
+    `).join('');
+  } else {
+    dom.syncModalGroupList.innerHTML = `<p class="empty-state" data-i18n="noGroups"></p>`;
+  }
+
+  // Sort and render users
+  const sortedUsers = [...state.users].sort((a, b) => a.email.localeCompare(b.email));
+  if (sortedUsers.length > 0) {
+    dom.syncModalUserList.innerHTML = sortedUsers.map(user => `
+      <label class="check-item">
+        <input type="checkbox" data-userid="${user.id}">
+        <span>${user.email}</span>
+      </label>
+    `).join('');
+  } else {
+    dom.syncModalUserList.innerHTML = `<p class="empty-state" data-i18n="noUsers"></p>`;
+  }
+
+  // Reset permission dropdown
+  dom.syncModalPermissionSelect.value = 'full';
+
+  dom.syncModalBackdrop.style.display = 'flex';
+  applyStrings(); // Apply strings to new modal content
+}
+
+function hideSyncModal() {
+  dom.syncModalBackdrop.style.display = 'none';
+}
+
+async function handleSyncModalApply() {
+  const permissionKey = dom.syncModalPermissionSelect.value;
+
+  // 1. Get all checked user IDs directly
+  const selectedUserIds = new Set();
+  dom.syncModalUserList.querySelectorAll('input[data-userid]:checked').forEach(input => {
+    selectedUserIds.add(input.dataset.userid);
+  });
+
+  // 2. Get all checked group IDs and add their user IDs
+  dom.syncModalGroupList.querySelectorAll('input[data-groupid]:checked').forEach(input => {
+    const group = state.groups.find(g => g.id === input.dataset.groupid);
+    if (group) {
+      group.userIds.forEach(uid => selectedUserIds.add(uid));
+    }
+  });
+
+  // 3. Convert Set of IDs to array of emails
+  const emailsToSync = Array.from(selectedUserIds).map(id => {
+    return state.users.find(u => u.id === id)?.email;
+  }).filter(Boolean); // Filter out any undefined emails
+
+  hideSyncModal(); // Hide modal immediately
+
+  if (emailsToSync.length === 0) {
+    console.log('Sync: No users selected.');
+    return; // Nothing to do
+  }
+
+  // 4. Get active tab
+  const tab = await getActiveNotionTab();
+  if (!tab) return; // Error already shown by getActiveNotionTab
+
+  const payload = {
+    emails: emailsToSync,
+    permissionKey: permissionKey
+  };
+
+  // 5. Inject and run the bot
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ['content_scripts/bot.js'],
+    });
+
+    // CORREGIDO: Call the function that now lives on the 'window' object
+    const [runResult] = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: (payload) => window.syncPermissionsOnNotionPage(payload),
+      args: [payload],
+    });
+
+    // CORREGIDO: Comprobar si hay un 'errorKey' y traducirlo
+    if (runResult && runResult.result && runResult.result.errorKey) {
+      const errorKey = runResult.result.errorKey;
+      const errorMessage = state.langStrings[errorKey] || 'Unknown synchronization error.';
+      showDialog(errorMessage, 'syncErrorTitle', 'alert');
+    } else {
+      showDialog(state.langStrings['syncSuccessMessage'] || 'Sync process initiated.', 'syncSuccessTitle', 'alert');
+    }
+  } catch (e) {
+    console.error('ShareSquad: Error running sync bot.', e);
+    showDialog(e.message, 'syncErrorTitle', 'alert');
+  }
+}
+// --- END: FASE 2 ---
+
 
 // --- EVENT LISTENERS ---
 function setupEventListeners() {
@@ -666,27 +788,28 @@ function setupEventListeners() {
   // Language toggle
   dom.langToggleBtn.addEventListener('click', handleLangToggle);
 
-  // NEW: View toggles
+  // View toggles
   dom.toggleUserTags.addEventListener('click', (e) => {
     state.showUserGroupTags = e.target.checked;
     saveViewPreference('shareSquad_showUserGroupTags', state.showUserGroupTags);
-    renderUserList(); // Just re-render the user list
-    applyStrings(); // Re-apply tooltips
+    renderUserList();
+    applyStrings();
   });
   dom.toggleGroupTags.addEventListener('click', (e) => {
     state.showGroupMemberTags = e.target.checked;
     saveViewPreference('shareSquad_showGroupMemberTags', state.showGroupMemberTags);
-    renderGroupList(); // Just re-render the group list
-    applyStrings(); // Re-apply tooltips
+    renderGroupList();
+    applyStrings();
   });
 
-  // NEW: Import/Export buttons
+  // Import/Export buttons
   dom.exportBtn.addEventListener('click', handleExport);
   dom.importBtn.addEventListener('click', handleImportClick);
   dom.importFileInput.addEventListener('change', handleFileSelected);
 
-  // NEW: Dialog modal buttons
-  dom.dialogBtnOk.addEventListener('click', hideDialog);
+  // Dialog modal buttons
+  // MODIFIED: Use handleDialogOk for the OK button
+  dom.dialogBtnOk.addEventListener('click', handleDialogOk);
   dom.dialogBtnNo.addEventListener('click', hideDialog);
   dom.dialogBtnYes.addEventListener('click', () => {
     if (typeof currentDialog.onConfirm === 'function') {
@@ -694,6 +817,31 @@ function setupEventListeners() {
     }
     hideDialog();
   });
+
+  // --- NEW: Fase 2 Listeners ---
+  dom.experimentalToggle.addEventListener('click', (e) => {
+    const isChecked = e.target.checked;
+    state.experimentalMode = isChecked;
+    saveViewPreference('shareSquad_experimentalMode', state.experimentalMode);
+    render();
+    applyStrings();
+
+    // NEW: Show warning on first check
+    if (isChecked && !state.hasSeenSyncWarning) {
+      showDialog(
+        state.langStrings['syncWarningMessage'] || "How to use...",
+        'syncWarningTitle',
+        'alert',
+        null, // No confirm callback
+        { showDontShowAgain: true } // NEW: Pass the option
+      );
+    }
+  });
+
+  dom.syncPermissionsBtn.addEventListener('click', showSyncModal);
+  dom.syncModalCancelBtn.addEventListener('click', hideSyncModal);
+  dom.syncModalApplyBtn.addEventListener('click', handleSyncModalApply);
+  // --- END: Fase 2 Listeners ---
 
   // Event delegation for dynamic lists
   dom.userList.addEventListener('click', (e) => {
@@ -707,7 +855,7 @@ function setupEventListeners() {
       showModal('user', 'edit', id);
     } else if (action === 'delete-user') {
       handleDelete('user', id);
-    } else if (action === 'inject-user') { // NEW
+    } else if (action === 'inject-user') {
       handleInjectUser(id);
     }
   });
@@ -724,7 +872,7 @@ function setupEventListeners() {
     } else if (action === 'delete-group') {
       handleDelete('group', id);
     } else if (action === 'inject-group') {
-      handleInjectGroup(id); // MODIFIED: Call specific handler
+      handleInjectGroup(id);
     }
   });
 }
@@ -737,11 +885,51 @@ async function initApp() {
   await fetchData();
   await loadStrings();
   render();
-  // Call applyStrings again AFTER render, as render might create new elements
   applyStrings();
 }
 
+// CORREGIDO: Mover la inicialización del DOM aquí dentro.
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Poblar el objeto dom AHORA que el DOM está listo ---
+  dom.userList = document.getElementById('user-list');
+  dom.groupList = document.getElementById('group-list');
+  dom.addUserBtn = document.getElementById('add-user-btn');
+  dom.addGroupBtn = document.getElementById('add-group-btn');
+  dom.noUsersMsg = document.getElementById('no-users-msg');
+  dom.noGroupsMsg = document.getElementById('no-groups-msg');
+  dom.modalBackdrop = document.getElementById('modal-backdrop');
+  dom.modalTitle = document.getElementById('modal-title');
+  dom.modalBody = document.getElementById('modal-body');
+  dom.modalCancelBtn = document.getElementById('modal-cancel-btn');
+  dom.modalSaveBtn = document.getElementById('modal-save-btn');
+  dom.langToggleBtn = document.getElementById('lang-toggle-btn');
+  dom.toggleUserTags = document.getElementById('toggle-user-tags');
+  dom.toggleGroupTags = document.getElementById('toggle-group-tags');
+  dom.importBtn = document.getElementById('import-btn');
+  dom.exportBtn = document.getElementById('export-btn');
+  dom.importFileInput = document.getElementById('import-file-input');
+  // Dialog Modal Elements
+  dom.dialogBackdrop = document.getElementById('dialog-modal-backdrop');
+  dom.dialogTitle = document.getElementById('dialog-modal-title');
+  dom.dialogMessage = document.getElementById('dialog-modal-message');
+  dom.dialogBtnOk = document.getElementById('dialog-btn-ok');
+  dom.dialogBtnNo = document.getElementById('dialog-btn-no');
+  dom.dialogBtnYes = document.getElementById('dialog-btn-yes');
+  // "Don't show again" elements
+  dom.syncWarningExtra = document.getElementById('sync-warning-extra');
+  dom.syncWarningDontShow = document.getElementById('sync-warning-dont-show');
+  // Fase 2 Elements
+  dom.experimentalToggle = document.getElementById('toggle-experimental');
+  dom.syncPermissionsBtn = document.getElementById('sync-permissions-btn');
+  // Sync Modal (matches your HTML)
+  dom.syncModalBackdrop = document.getElementById('sync-modal');
+  dom.syncModalPermissionSelect = document.getElementById('sync-permission-select');
+  dom.syncModalGroupList = document.getElementById('sync-group-list');
+  dom.syncModalUserList = document.getElementById('sync-user-list');
+  dom.syncModalCancelBtn = document.getElementById('sync-modal-cancel-btn');
+  dom.syncModalApplyBtn = document.getElementById('sync-modal-apply-btn');
+  // --- Fin de poblar el DOM ---
+
   initApp();
   setupEventListeners();
 });

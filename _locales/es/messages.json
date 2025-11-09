@@ -1,125 +1,65 @@
 {
-  "extName": {
-    "message": "ShareSquad for Notion"
-  },
-  "extDescription": {
-    "message": "Gestiona e inyecta 'squads' (grupos) de usuarios en el diálogo de compartir de Notion."
-  },
-  "openSidePanel": {
-    "message": "Abrir ShareSquad for Notion"
-  },
-  "sidePanelTitle": {
-    "message": "Gestor de Grupos"
-  },
-  "users": {
-    "message": "Usuarios"
-  },
-  "groups": {
-    "message": "Grupos"
-  },
-  "addUser": {
-    "message": "Añadir Usuario"
-  },
-  "addGroup": {
-    "message": "Añadir Grupo"
-  },
-  "email": {
-    "message": "Email"
-  },
-  "groupName": {
-    "message": "Nombre del grupo"
-  },
-  "save": {
-    "message": "Guardar"
-  },
-  "cancel": {
-    "message": "Cancelar"
-  },
-  "edit": {
-    "message": "Editar"
-  },
-  "delete": {
-    "message": "Eliminar"
-  },
-  "inject": {
-    "message": "Inyectar"
-  },
-  "createdBy": {
-    "message": "Creado con"
-  },
-  "by": {
-    "message": "por"
-  },
-  "modalEditUser": {
-    "message": "Editar Usuario"
-  },
-  "modalAddUser": {
-    "message": "Añadir Nuevo Usuario"
-  },
-  "modalEditGroup": {
-    "message": "Editar Grupo"
-  },
-  "modalAddGroup": {
-    "message": "Añadir Nuevo Grupo"
-  },
-  "members": {
-    "message": "Miembros"
-  },
-  "noUsers": {
-    "message": "Aún no hay usuarios añadidos."
-  },
-  "noGroups": {
-    "message": "Aún no hay grupos definidos."
-  },
-  "deleteConfirm": {
-    "message": "¿Estás seguro de que quieres eliminar esto?"
-  },
-  "langAuto": {
-    "message": "Automático"
-  },
-  "langEN": {
-    "message": "Inglés"
-  },
-  "langES": {
-    "message": "Español"
-  },
-  "notificationTitle": {
-    "message": "ShareSquad for Notion"
-  },
-  "notificationMessage": {
-    "message": "Esta extensión solo funciona en páginas de notion.so. Por favor, abre Notion para usarla."
-  },
-  "toggleUserTagsTitle": {
-    "message": "Mostrar etiquetas de grupo bajo cada usuario"
-  },
-  "toggleGroupTagsTitle": {
-    "message": "Mostrar etiquetas de miembro bajo cada grupo"
-  },
-  "importData": {
-    "message": "Importar"
-  },
-  "exportData": {
-    "message": "Exportar"
-  },
-  "importConfirm": {
-    "message": "¿Estás seguro? Esto sobrescribirá TODOS los datos actuales."
-  },
-  "importError": {
-    "message": "Archivo no válido. Por favor, selecciona un archivo JSON de ShareSquad válido."
-  },
-  "importSuccess": {
-    "message": "Datos importados con éxito."
-  },
-  "confirmTitle": {
-    "message": "Confirmar Acción"
-  },
-  "confirmYes": {
-    "message": "Sí"
-  },
-  "confirmNo": {
-    "message": "No"
-  },
-  "alertOK": {
-    "message": "Aceptar"
-  }
+  "appName": { "message": "ShareSquad para Notion" },
+  "appDescription": { "message": "Gestiona e inyecta grupos de usuarios en el menú de compartir de Notion." },
+  "users": { "message": "Usuarios" },
+  "addUser": { "message": "Añadir Usuario" },
+  "editUser": { "message": "Editar Usuario" },
+  "noUsers": { "message": "Aún no hay usuarios añadidos." },
+  "groups": { "message": "Grupos" },
+  "addGroup": { "message": "Añadir Grupo" },
+  "editGroup": { "message": "Editar Grupo" },
+  "noGroups": { "message": "Aún no hay grupos creados." },
+  "email": { "message": "Email" },
+  "groupName": { "message": "Nombre del grupo" },
+  "members": { "message": "Miembros" },
+  "cancel": { "message": "Cancelar" },
+  "save": { "message": "Guardar" },
+  "edit": { "message": "Editar" },
+  "delete": { "message": "Eliminar" },
+  "inject": { "message": "Inyectar" },
+  "deleteConfirmTitle": { "message": "Confirmar Eliminación" },
+  "deleteConfirmMessageUser": { "message": "¿Estás seguro de que quieres eliminar este usuario? También será eliminado de todos los grupos." },
+  "deleteConfirmMessageGroup": { "message": "¿Estás seguro de que quieres eliminar este grupo? Los usuarios no serán eliminados." },
+  "langToggleAuto": { "message": "Idioma: Automático" },
+  "langToggleEN": { "message": "Idioma: Inglés" },
+  "langToggleES": { "message": "Idioma: Español" },
+  "toggleUserTagsTooltip": { "message": "Mostrar/ocultar etiquetas de grupo para usuarios" },
+  "toggleGroupTagsTooltip": { "message": "Mostrar/ocultar etiquetas de miembro para grupos" },
+  "import": { "message": "Importar" },
+  "export": { "message": "Exportar" },
+  "importConfirmTitle": { "message": "Importar Datos" },
+  "importConfirmMessage": { "message": "Esto sobrescribirá TODOS los usuarios y grupos actuales. ¿Estás seguro?" },
+  "importSuccessTitle": { "message": "Éxito" },
+  "importSuccess": { "message": "Datos importados con éxito." },
+  "importErrorTitle": { "message": "Error de Importación" },
+  "importErrorInvalidFile": { "message": "Estructura de archivo inválida. El archivo debe ser un JSON que contenga los arrays 'users' y 'groups'." },
+  "dialogYes": { "message": "Sí" },
+  "dialogNo": { "message": "No" },
+  "dialogOk": { "message": "Aceptar" },
+  "experimentalMode": { "message": "Activar modo experimental" },
+  "experimentalModeTooltip": { "message": "AVISO: Esto activa funciones experimentales que leen e interactúan con el DOM de Notion. Pueden dejar de funcionar si Notion actualiza su interfaz." },
+  "syncPermissions": { "message": "Sincronizar Permisos" },
+  "syncPermissionsTooltip": { "message": "Sincronizar permisos para los elementos seleccionados" },
+  "syncModalTitle": { "message": "Sincronizar Permisos" },
+  "syncPermissionToApply": { "message": "Permiso a aplicar" },
+  "syncPermissionFull": { "message": "Acceso completo" },
+  "syncPermissionEdit": { "message": "Puede editar" },
+  "syncPermissionComment": { "message": "Puede comentar" },
+  "syncPermissionView": { "message": "Puede ver" },
+  "syncGroupsTitle": { "message": "Grupos a sincronizar" },
+  "syncUsersTitle": { "message": "Usuarios a sincronizar" },
+  "syncModalApply": { "message": "Aplicar Sincronización" },
+  "syncErrorTitle": { "message": "Error de Sincronización" },
+  "syncSuccessTitle": { "message": "Éxito" },
+  "syncSuccessMessage": { "message": "Proceso de sincronización iniciado. El bot está trabajando." },
+  "syncWarningTitle": { "message": "Guía del Modo Experimental" },
+  "syncWarningMessage": { "message": "¡Has activado el modo experimental!\n\nPara usar [⇅ Sincronizar Permisos]:\n\n1. Abre el pop-up de \"Compartir\" en Notion.\n2. Haz clic en \"⇅ Sincronizar Permisos\".\n3. Selecciona los grupos/usuarios y el permiso a aplicar." },
+  "syncWarningDontShow": { "message": "No volver a mostrar" },
+  "notificationTitle": { "message": "ShareSquad para Notion" },
+  "notificationMessage": { "message": "Esta extensión solo funciona en páginas de notion.so." },
+  "emailPlaceholder": { "message": "nombre@ejemplo.com" },
+  "groupPlaceholder": { "message": "Claustro" },
+  "syncErrorShareMenu": { "message": "No se pudo encontrar el menú de compartir de Notion. Asegúrate de que el pop-up de \"Compartir\" esté abierto." },
+  "syncErrorInput": { "message": "No se pudo encontrar el campo de email para invitar a nuevos usuarios." },
+  "syncErrorInviteBtn": { "message": "No se pudo encontrar el botón de 'Invitar'. El bot puede haber sido interrumpido." }
 }
