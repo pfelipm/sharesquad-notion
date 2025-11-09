@@ -52,7 +52,7 @@ Esta es la nueva función experimental, que automatiza parte del proceso.
 
 *   **Arquitectura:** La extensión utiliza **Manifest V3**, con un *Service Worker* en segundo plano y la API de *Side Panel*.
 *   **Ligera y rápida:** Construida con HTML, CSS y JavaScript puros, sin frameworks pesados, para un rendimiento óptimo.
-*   **Almacenamiento:** Los datos se almacenan de forma segura utilizando `chrome.storage.sync`.
+*   **Almacenamiento:** Los datos de usuarios y grupos se sincronizan con tu cuenta de Google usando `chrome.storage.sync`, mientras que las preferencias de la aplicación (como el idioma) se guardan localmente con `chrome.storage.local`.
 *   **Permisos Requeridos:**
     *   `tabs`: Para verificar que te encuentras en una página de Notion.
     *   `scripting`: Necesario para que los botones "Inyectar" y "Sincronizar Permisos" puedan interactuar con el cuadro de diálogo de compartir de Notion.

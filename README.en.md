@@ -52,7 +52,7 @@ This is the new experimental feature that automates part of the process.
 
 *   **Architecture:** The extension uses **Manifest V3**, with a background *Service Worker* and the *Side Panel* API.
 *   **Lightweight and Fast:** Built with pure HTML, CSS, and JavaScript, without heavy frameworks, for optimal performance.
-*   **Storage:** Data is securely stored using `chrome.storage.sync`.
+*   **Storage:** User and group data is synced with your Google account using `chrome.storage.sync`, while application preferences (like language) are stored locally using `chrome.storage.local`.
 *   **Required Permissions:**
     *   `tabs`: To verify that you are on a Notion page.
     *   `scripting`: Necessary for the "Inject" and "Sync Permissions" buttons to interact with Notion's share dialog.
