@@ -63,5 +63,7 @@
   "syncErrorInput": { "message": "Could not find the email input field to invite new users." },
   "syncErrorInviteBtn": { "message": "Could not find the 'Invite' button. The bot may have been interrupted." },
   "syncWorkingTitle": { "message": "Syncing..." },
-  "syncWorkingMessage": { "message": "The bot is working. Please wait..." }
+  "syncWorkingMessage": { "message": "The bot is working. Please wait..." },
+  "createdBy": { "message": "Created with" },
+  "by": { "message": "by" }
 }
