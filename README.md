@@ -7,7 +7,7 @@
 ShareSquad for Notion es una extensión de Chrome diseñada para optimizar la forma en que colaboras con personas externas en Notion.
 
 Para entender el valor que aporta, es importante conocer cómo Notion gestiona los accesos:
-*   **Miembros (Members):** Tienen acceso a todo el espacio de trabajo. Suelen ser miembros del equipo interno, con permisos amplios para crear y editar, y cada uno representa un coste por asiento en el plan de facturación.
+*   **Miembros (Members):** Tienen acceso a todo el espacio de trabajo. Suelen ser miembros del equipo interno, con permisos amplios para crear y editar, y cada uno representa un coste por puesto en el plan de facturación.
 *   **Invitados (Guests):** Son colaboradores externos invitados únicamente a páginas específicas. Su acceso es limitado y, a menudo, resultan una opción más económica, ya que los planes de Notion suelen incluir un número de invitados gratuitos.
 
 El reto surge cuando se necesita invitar repetidamente a los mismos grupos de colaboradores externos a diferentes páginas. Notion no ofrece una forma nativa de agrupar a estos invitados. **ShareSquad resuelve este problema** permitiéndote crear y gestionar "squads" (equipos) de invitados, para que puedas añadirlos a cualquier página de forma eficiente.
