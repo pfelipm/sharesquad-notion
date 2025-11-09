@@ -61,7 +61,7 @@ This is the new experimental feature that automates part of the process.
 
 As this is an experimental extension, it must be installed manually:
 
-1.  **Download the Repository:** Click the `Code` > `Download ZIP` button.
+1.  **Download the Repository:** Click the `Code` → `Download ZIP` button. Alternatively, you can clone the repository using `git clone https://github.com/pfelipm/sharesquad-notion.git`.
 2.  **Unzip the File:** Extract the ZIP file's contents to a permanent folder on your computer.
 3.  **Open Chrome Extensions:** Go to `chrome://extensions`.
 4.  **Enable Developer Mode:** Activate the switch in the top-right corner.
