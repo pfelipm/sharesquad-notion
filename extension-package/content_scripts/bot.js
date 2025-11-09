@@ -121,7 +121,6 @@ function findInvitePermissionDropdown() {
   return dropdown;
 }
 
-
 /**
  * Main function for the bot.
  * Implements the "Fusión Aditiva" (Hybrid) logic.
@@ -135,7 +134,6 @@ async function syncPermissionsOnNotionPage(payload) {
   const shareMenu = findShareMenu();
   if (!shareMenu) {
     // We're not in the share menu, abort.
-    // CORREGIDO: Devolver una clave de error, no un string.
     return { errorKey: 'syncErrorShareMenu' };
   }
 
@@ -178,7 +176,6 @@ async function syncPermissionsOnNotionPage(payload) {
     const input = document.querySelector('input[placeholder*="Correo electrónico"], input[placeholder*="Email or group"]');
     if (!input) {
       console.error('ShareSquad Bot: Could not find email input field.');
-      // CORREGIDO: Devolver una clave de error, no un string.
       return { errorKey: 'syncErrorInput' };
     }
 
@@ -215,7 +212,6 @@ async function syncPermissionsOnNotionPage(payload) {
       console.log('ShareSquad Bot: Invite process complete.');
     } else {
       console.error('ShareSquad Bot: Could not find "Invite" button.');
-      // CORREGIDO: Devolver una clave de error, no un string.
       return { errorKey: 'syncErrorInviteBtn' };
     }
   }
@@ -225,3 +221,62 @@ async function syncPermissionsOnNotionPage(payload) {
 
 // CORREGIDO: Expose the function to the global 'window' scope
 window.syncPermissionsOnNotionPage = syncPermissionsOnNotionPage;
+
+// --- NUEVA FUNCIÓN (Para Fase 1) ---
+/**
+ * This function is serialized and executed *on the Notion page*.
+ * It checks if the inject target (email input) exists.
+ * @returns {object} { success: true } or { errorKey: '...' }
+ */
+function preCheckInject() {
+  const input = document.querySelector('input[placeholder*="Correo electrónico o grupo"], input[placeholder*="Email or group"]');
+  if (input) {
+    return { success: true };
+  }
+  // No podemos encontrar el input. Esto significa que el pop-up de "Invitar" no está abierto.
+  // Devolvemos el mismo error que la Fase 2 para ser coherentes.
+  return { errorKey: 'syncErrorShareMenu' };
+}
+// Expose this function as well
+window.preCheckInject = preCheckInject;
+
+/**
+ * This function is serialized and executed *on the Notion page*.
+ * It cannot access any variables from this script's scope.
+ * @returns {object} { success: true } or { errorKey: '...' }
+ */
+function injectEmailsToNotion(emailsToInject) {
+  // Find the Notion input field. This is the "fragile" part.
+  const input = document.querySelector('input[placeholder*="Correo electrónico o grupo"], input[placeholder*="Email or group"]');
+
+  if (input) {
+    const currentEmails = input.value
+      .split(',')
+      .map(email => email.trim())
+      .filter(email => email.length > 0);
+
+    const newEmails = emailsToInject
+      .split(',')
+      .map(email => email.trim())
+      .filter(email => email.length > 0);
+
+    const combinedEmails = new Set([...currentEmails, ...newEmails]);
+
+    const finalEmailString = Array.from(combinedEmails).join(', ');
+
+    input.value = finalEmailString;
+
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+
+    // Si llegamos aquí, fue un éxito
+    return { success: true };
+  } else {
+    console.error('ShareSquad for Notion: Could not find the share input field.');
+    // CORREGIDO: Devolver una clave de error
+    return { errorKey: 'syncErrorInput' };
+  }
+}
+
+// Expose this function as well
+window.injectEmailsToNotion = injectEmailsToNotion;

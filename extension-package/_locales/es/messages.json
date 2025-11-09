@@ -51,7 +51,7 @@
   "syncModalApply": { "message": "Aplicar Sincronización" },
   "syncErrorTitle": { "message": "Error de Sincronización" },
   "syncSuccessTitle": { "message": "Éxito" },
-  "syncSuccessMessage": { "message": "Proceso de sincronización iniciado. El bot está trabajando." },
+  "syncSuccessMessage": { "message": "¡Sincronización completada con éxito!" },
   "syncWarningTitle": { "message": "Guía del Modo Experimental" },
   "syncWarningMessage": { "message": "¡Has activado el modo experimental!\n\nPara usar [⇅ Sincronizar Permisos]:\n\n1. Abre el pop-up de \"Compartir\" en Notion.\n2. Haz clic en \"⇅ Sincronizar Permisos\".\n3. Selecciona los grupos/usuarios y el permiso a aplicar." },
   "syncWarningDontShow": { "message": "No volver a mostrar" },
@@ -61,5 +61,7 @@
   "groupPlaceholder": { "message": "Claustro" },
   "syncErrorShareMenu": { "message": "No se pudo encontrar el menú de compartir de Notion. Asegúrate de que el pop-up de \"Compartir\" esté abierto." },
   "syncErrorInput": { "message": "No se pudo encontrar el campo de email para invitar a nuevos usuarios." },
-  "syncErrorInviteBtn": { "message": "No se pudo encontrar el botón de 'Invitar'. El bot puede haber sido interrumpido." }
+  "syncErrorInviteBtn": { "message": "No se pudo encontrar el botón de 'Invitar'. El bot puede haber sido interrumpido." },
+  "syncWorkingTitle": { "message": "Sincronizando..." },
+  "syncWorkingMessage": { "message": "El bot está trabajando. Por favor, espera..." }
 }

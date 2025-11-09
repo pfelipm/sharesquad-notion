@@ -51,7 +51,7 @@
   "syncModalApply": { "message": "Apply Sync" },
   "syncErrorTitle": { "message": "Sync Error" },
   "syncSuccessTitle": { "message": "Success" },
-  "syncSuccessMessage": { "message": "Sync process initiated. The bot is now working." },
+  "syncSuccessMessage": { "message": "Sync completed successfully!" },
   "syncWarningTitle": { "message": "Experimental Mode Guide" },
   "syncWarningMessage": { "message": "You've enabled experimental mode!\n\nTo use [⇅ Sync Permissions]:\n\n1. Open the \"Share\" pop-up on a Notion page.\n2. Click \"⇅ Sync Permissions\".\n3. Select the groups/users and the permission to apply." },
   "syncWarningDontShow": { "message": "Don't show this again" },
@@ -61,5 +61,7 @@
   "groupPlaceholder": { "message": "e.g., Faculty" },
   "syncErrorShareMenu": { "message": "Could not find Notion share menu. Please make sure the \"Share\" pop-up is open." },
   "syncErrorInput": { "message": "Could not find the email input field to invite new users." },
-  "syncErrorInviteBtn": { "message": "Could not find the 'Invite' button. The bot may have been interrupted." }
+  "syncErrorInviteBtn": { "message": "Could not find the 'Invite' button. The bot may have been interrupted." },
+  "syncWorkingTitle": { "message": "Syncing..." },
+  "syncWorkingMessage": { "message": "The bot is working. Please wait..." }
 }

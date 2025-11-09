@@ -470,7 +470,19 @@ function handleDialogOk() {
   }
   hideDialog();
 }
-// --- END: Custom Dialog Modal ---
+
+// --- NEW: Loader Modal ---
+function showLoader(titleKey, messageKey) {
+  dom.loaderModalTitle.dataset.i18n = titleKey;
+  dom.loaderModalMessage.dataset.i18n = messageKey;
+  applyStrings(); // Apply new strings
+  dom.loaderModalBackdrop.style.display = 'flex';
+}
+
+function hideLoader() {
+  dom.loaderModalBackdrop.style.display = 'none';
+}
+// --- END: Loader Modal ---
 
 
 function handleDelete(type, id) {
@@ -568,8 +580,8 @@ async function getActiveNotionTab() {
       return tab;
     }
 
-    // CORREGIDO: Usar la clave de error del bot, que ahora está en i18n
-    showDialog(state.langStrings['syncErrorShareMenu'] || 'Could not find Notion share menu. Please make sure the "Share" pop-up is open.', 'syncErrorTitle', 'alert');
+    console.warn('Not on a Notion tab.');
+    // Not showing a dialog here, the callers will handle it.
     return null;
   } catch(e) {
     console.error("Error getting active tab:", e);
@@ -586,26 +598,54 @@ async function getActiveNotionTab() {
 async function handleInject(emailList) {
   if (!emailList) return;
 
-  // MODIFICADO: No necesitamos la pestaña aquí, la función de inyección la encontrará.
-  // La función `injectEmailsToNotion` se ejecutará en la pestaña activa.
-  // Necesitamos asegurarnos de que el usuario está en Notion.
-
-  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  if (!tab || !tab.url || !tab.url.startsWith('https://www.notion.so/')) {
-    // Si no estamos en Notion, mostramos la notificación (desde background.js)
-    // Pero aquí podemos mostrar un diálogo si el panel ya está abierto.
-    // ... No, es mejor dejar que background.js lo maneje.
-    // Solo inyectamos si estamos en Notion.
-     showDialog(state.langStrings['notificationMessage'] || 'This extension only works on notion.so pages.', 'notificationTitle', 'alert');
-     return;
+  const tab = await getActiveNotionTab();
+  if (!tab) {
+    showDialog(state.langStrings['notificationMessage'] || 'This extension only works on notion.so pages.', 'notificationTitle', 'alert');
+    return;
   }
 
+  // --- CORRECCIÓN (FIX 1): Pre-check if the inject target exists ---
+  try {
+    // 1. Inject the bot script first to make sure functions are available
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ['content_scripts/bot.js'],
+    });
 
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    function: injectEmailsToNotion,
-    args: [emailList]
-  });
+    // 2. Run the pre-check function
+    const [preCheckResult] = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => window.preCheckInject(), // Assumes bot.js exposes this
+    });
+
+    // 3. Check for error
+    if (preCheckResult && preCheckResult.result && preCheckResult.result.errorKey) {
+      const errorKey = preCheckResult.result.errorKey;
+      // Use the 'syncErrorShareMenu' key, as it's the same error
+      const errorMessage = state.langStrings[errorKey] || 'Could not find Notion share menu.';
+      showDialog(errorMessage, 'syncErrorTitle', 'alert');
+      return; // Stop if popup isn't open
+    }
+
+    // 4. If pre-check passes, run the actual inject function
+    const [injectResult] = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: (emails) => window.injectEmailsToNotion(emails), // Call exposed function
+      args: [emailList]
+    });
+
+    // 5. Check for *another* error (e.g., input found then disappeared)
+    if (injectResult && injectResult.result && injectResult.result.errorKey) {
+       const errorKey = injectResult.result.errorKey;
+       const errorMessage = state.langStrings[errorKey] || 'Could not find email input.';
+       showDialog(errorMessage, 'syncErrorTitle', 'alert');
+    }
+    // No success message for inject, it's distracting.
+
+  } catch (e) {
+    console.error('ShareSquad: Error running inject script.', e);
+    showDialog(e.message, 'syncErrorTitle', 'alert');
+  }
 }
 
 /**
@@ -631,40 +671,6 @@ async function handleInjectUser(userId) {
   if (!user) return;
 
   await handleInject(user.email); // Pass the single email
-}
-
-
-/**
- * This function is serialized and executed *on the Notion page*.
- * It cannot access any variables from this script's scope.
- */
-function injectEmailsToNotion(emailsToInject) {
-  // Find the Notion input field. This is the "fragile" part.
-  const input = document.querySelector('input[placeholder*="Correo electrónico o grupo"], input[placeholder*="Email or group"]');
-
-  if (input) {
-    const currentEmails = input.value
-      .split(',')
-      .map(email => email.trim())
-      .filter(email => email.length > 0);
-
-    const newEmails = emailsToInject
-      .split(',')
-      .map(email => email.trim())
-      .filter(email => email.length > 0);
-
-    const combinedEmails = new Set([...currentEmails, ...newEmails]);
-
-    const finalEmailString = Array.from(combinedEmails).join(', ');
-
-    input.value = finalEmailString;
-
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-    input.dispatchEvent(new Event('change', { bubbles: true }));
-  } else {
-    console.error('ShareSquad for Notion: Could not find the share input field.');
-    // No podemos devolver un error aquí que sea capturado por la UI
-  }
 }
 
 // --- NEW: FASE 2 (Sync Permissions) ---
@@ -738,38 +744,49 @@ async function handleSyncModalApply() {
 
   // 4. Get active tab
   const tab = await getActiveNotionTab();
-  if (!tab) return; // Error already shown by getActiveNotionTab
+  if (!tab) {
+    // CORREGIDO: getActiveNotionTab ya muestra el error
+    return;
+  }
 
   const payload = {
     emails: emailsToSync,
     permissionKey: permissionKey
   };
 
-  // 5. Inject and run the bot
+  // --- CORRECCIÓN (FIX 2): Mostrar Loader ANTES, ocultar DESPUÉS ---
+  showLoader('syncWorkingTitle', 'syncWorkingMessage');
+
+  let runResult;
   try {
+    // 5. Inject and run the bot
     await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       files: ['content_scripts/bot.js'],
     });
 
-    // CORREGIDO: Call the function that now lives on the 'window' object
-    const [runResult] = await chrome.scripting.executeScript({
+    [runResult] = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: (payload) => window.syncPermissionsOnNotionPage(payload),
       args: [payload],
     });
 
-    // CORREGIDO: Comprobar si hay un 'errorKey' y traducirlo
-    if (runResult && runResult.result && runResult.result.errorKey) {
-      const errorKey = runResult.result.errorKey;
-      const errorMessage = state.langStrings[errorKey] || 'Unknown synchronization error.';
-      showDialog(errorMessage, 'syncErrorTitle', 'alert');
-    } else {
-      showDialog(state.langStrings['syncSuccessMessage'] || 'Sync process initiated.', 'syncSuccessTitle', 'alert');
-    }
   } catch (e) {
     console.error('ShareSquad: Error running sync bot.', e);
-    showDialog(e.message, 'syncErrorTitle', 'alert');
+    runResult = { result: { errorKey: 'syncErrorTitle' } }; // Generic error
+  } finally {
+    // 6. Ocultar el Loader, pase lo que pase
+    hideLoader();
+  }
+
+  // 7. Mostrar resultado DESPUÉS de ocultar el loader
+  if (runResult && runResult.result && runResult.result.errorKey) {
+    const errorKey = runResult.result.errorKey;
+    const errorMessage = state.langStrings[errorKey] || 'Unknown synchronization error.';
+    showDialog(errorMessage, 'syncErrorTitle', 'alert');
+  } else {
+    // CORREGIDO: Usar el nuevo mensaje de "Éxito"
+    showDialog(state.langStrings['syncSuccessMessage'] || 'Sync completed!', 'syncSuccessTitle', 'alert');
   }
 }
 // --- END: FASE 2 ---
@@ -808,7 +825,6 @@ function setupEventListeners() {
   dom.importFileInput.addEventListener('change', handleFileSelected);
 
   // Dialog modal buttons
-  // MODIFIED: Use handleDialogOk for the OK button
   dom.dialogBtnOk.addEventListener('click', handleDialogOk);
   dom.dialogBtnNo.addEventListener('click', hideDialog);
   dom.dialogBtnYes.addEventListener('click', () => {
@@ -818,7 +834,7 @@ function setupEventListeners() {
     hideDialog();
   });
 
-  // --- NEW: Fase 2 Listeners ---
+  // Fase 2 Listeners
   dom.experimentalToggle.addEventListener('click', (e) => {
     const isChecked = e.target.checked;
     state.experimentalMode = isChecked;
@@ -826,14 +842,14 @@ function setupEventListeners() {
     render();
     applyStrings();
 
-    // NEW: Show warning on first check
+    // Show warning on first check
     if (isChecked && !state.hasSeenSyncWarning) {
       showDialog(
         state.langStrings['syncWarningMessage'] || "How to use...",
         'syncWarningTitle',
         'alert',
         null, // No confirm callback
-        { showDontShowAgain: true } // NEW: Pass the option
+        { showDontShowAgain: true } // Pass the option
       );
     }
   });
@@ -841,7 +857,11 @@ function setupEventListeners() {
   dom.syncPermissionsBtn.addEventListener('click', showSyncModal);
   dom.syncModalCancelBtn.addEventListener('click', hideSyncModal);
   dom.syncModalApplyBtn.addEventListener('click', handleSyncModalApply);
-  // --- END: Fase 2 Listeners ---
+
+  // Loader modal listener (no buttons, but good practice)
+  dom.loaderModalBackdrop.addEventListener('click', () => {
+    // Don't allow closing by clicking backdrop
+  });
 
   // Event delegation for dynamic lists
   dom.userList.addEventListener('click', (e) => {
@@ -888,7 +908,6 @@ async function initApp() {
   applyStrings();
 }
 
-// CORREGIDO: Mover la inicialización del DOM aquí dentro.
 document.addEventListener('DOMContentLoaded', () => {
   // --- Poblar el objeto dom AHORA que el DOM está listo ---
   dom.userList = document.getElementById('user-list');
@@ -928,6 +947,10 @@ document.addEventListener('DOMContentLoaded', () => {
   dom.syncModalUserList = document.getElementById('sync-user-list');
   dom.syncModalCancelBtn = document.getElementById('sync-modal-cancel-btn');
   dom.syncModalApplyBtn = document.getElementById('sync-modal-apply-btn');
+  // NEW: Loader Modal
+  dom.loaderModalBackdrop = document.getElementById('loader-modal-backdrop');
+  dom.loaderModalTitle = document.getElementById('loader-modal-title');
+  dom.loaderModalMessage = document.getElementById('loader-modal-message');
   // --- Fin de poblar el DOM ---
 
   initApp();
