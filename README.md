@@ -1,6 +1,6 @@
 [🇬🇧 English version](README.en.md)
 
-# ShareSquad for Notion (Versión Experimental)
+# ShareSquad for Notion
 
 ## Descripción
 
