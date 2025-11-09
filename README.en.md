@@ -2,6 +2,8 @@
 
 # ShareSquad for Notion
 
+<p align="center"><img src="readme-archivos/EN%20recorrido.gif" alt="User interface tour"></p>
+
 ## Description
 
 ShareSquad for Notion is a Chrome extension designed to streamline how you collaborate with external individuals in Notion.
