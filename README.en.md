@@ -70,10 +70,8 @@ As this is a development version, it must be installed manually:
 
 ## Credits and Contributions
 
-Developed by **pfelipm**.
-
-If you find a bug or have an idea, please open an "Issue" on the GitHub repository.
+This project was created and is maintained by **[Pablo Felip](https://www.linkedin.com/in/pfelipm/)**.
 
 ## License
 
-This project is under the MIT License.
+This project is distributed under the terms of the [LICENSE](/LICENSE) file.
