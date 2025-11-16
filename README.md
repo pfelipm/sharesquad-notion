@@ -1,6 +1,6 @@
 [🇬🇧 English version](README.en.md)
 
-# ShareSquad for Notion
+# ShareSquad para Notion™
 
 <p align="center"><img src="readme-archivos/ES%20recorrido.gif" alt="Recorrido de la interfaz de usuario"></p>
 
