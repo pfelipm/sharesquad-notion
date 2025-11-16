@@ -1,6 +1,6 @@
 [🇪🇸 Spanish version](README.md)
 
-# ShareSquad for Notion
+# ShareSquad for Notion™
 
 <p align="center"><img src="readme-archivos/EN%20recorrido.gif" alt="User interface tour"></p>
 
