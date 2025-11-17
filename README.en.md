@@ -45,7 +45,7 @@ This is the new experimental feature that automates part of the process.
 ### Other Features
 
 *   **Guest and Group Management:** Create, edit, and delete guest profiles (name and email) and group them into reusable "squads".
-*   **Data Import and Export:** Back up your guests and groups to a JSON file.
+*   **Data Import and Export:** Back up your guests and groups to a JSON file. To make it easier to import teams from Google Groups™, you can use my companion tool [ShareSquad Companion](https://github.com/pfelipm/sharesquad-notion-companion), which prepares your member lists in a compatible format.
 *   **Cross-Device Sync:** Your configurations are saved and synchronized through your Chrome account.
 
 ## Technical Details

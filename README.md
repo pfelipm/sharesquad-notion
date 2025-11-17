@@ -45,7 +45,7 @@ Esta es la nueva función experimental, que automatiza parte del proceso.
 ### Otras Características
 
 *   **Gestión de Invitados y Grupos:** Crea, edita y elimina perfiles de invitados (nombre y correo) y agrúpalos en "squads" reutilizables.
-*   **Importación y Exportación de Datos:** Realiza copias de seguridad de tus invitados y grupos en un archivo JSON.
+*   **Importación y Exportación de Datos:** Realiza copias de seguridad de tus invitados y grupos en un archivo JSON. Para facilitar la importación de equipos desde Google Groups™, puedes usar mi herramienta complementaria [ShareSquad Companion](https://github.com/pfelipm/sharesquad-notion-companion), que prepara tus listas de miembros en un formato compatible.
 *   **Sincronización entre Dispositivos:** Tus configuraciones se guardan y sincronizan a través de tu cuenta de Chrome.
 
 ## Detalles Técnicos
