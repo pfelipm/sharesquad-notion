@@ -2,7 +2,7 @@
 
 # ShareSquad para Notion™
 
-<p align="center"><img src="readme-archivos/ES%20recorrido.gif" alt="Recorrido de la interfaz de usuario"></p>
+<p align="center"><img src="./readme-archivos/ES%20destacado.png" alt="Destacado de la extensión"></p>
 
 ## Descripción
 
@@ -13,6 +13,8 @@ Para entender el valor que aporta, es importante conocer cómo Notion gestiona l
 *   **Invitados (Guests):** Son colaboradores externos invitados únicamente a páginas específicas. Su acceso es limitado y, a menudo, resultan una opción más económica, ya que los planes de Notion suelen incluir un número de invitados gratuitos.
 
 El reto surge cuando se necesita invitar repetidamente a los mismos grupos de colaboradores externos a diferentes páginas. Notion no ofrece una forma nativa de agrupar a estos invitados. **ShareSquad resuelve este problema** permitiéndote crear y gestionar "squads" (equipos) de invitados, para que puedas añadirlos a cualquier página de forma eficiente.
+
+<p align="center"><img src="readme-archivos/ES%20recorrido.gif" alt="Recorrido de la interfaz de usuario"></p>
 
 ## Características y Flujo de Trabajo
 

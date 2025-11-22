@@ -2,7 +2,7 @@
 
 # ShareSquad for Notion™
 
-<p align="center"><img src="readme-archivos/EN%20recorrido.gif" alt="User interface tour"></p>
+<p align="center"><img src="./readme-archivos/EN%20destacado.png" alt="Extension highlight"></p>
 
 ## Description
 
@@ -13,6 +13,8 @@ To understand the value it provides, it's important to know how Notion manages a
 *   **Guests:** They are external collaborators invited only to specific pages. Their access is limited, and they are often a more economical option, as Notion plans usually include a number of free guests.
 
 The challenge arises when you need to repeatedly invite the same groups of external collaborators to different pages. Notion does not offer a native way to group these guests. **ShareSquad solves this problem** by allowing you to create and manage "squads" (teams) of guests, so you can add them to any page efficiently.
+
+<p align="center"><img src="readme-archivos/EN%20recorrido.gif" alt="User interface tour"></p>
 
 ## Features and Workflow
 
