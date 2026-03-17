@@ -38,6 +38,7 @@ This is the new experimental feature that automates part of the process.
     3.  Click the new **"Sync Permissions"** button.
 *   **Result:** The extension will simulate typing the email addresses into the already-open dialog and perform the necessary clicks to send the invitations automatically.
 *   **Important Behavior:**
+    *   **Access Level Configuration:** Unlike manual injection, this mode allows the extension to also set the **access level** (e.g., "Can view", "Can edit") of the invited users, as defined in the side panel.
     *   **Additive Process:** New users from your selection are invited to the page.
     *   **Permission Modification:** If a user in your selection has already been invited to the page, this function can **update their access level** (e.g., from "Can view" to "Can edit").
     *   **No Deletion:** This process **will never remove a user** from the page's access list, even if they are not part of your current selection. This is a safety measure to prevent accidental removal of access.
@@ -60,9 +61,13 @@ This is the new experimental feature that automates part of the process.
     *   `scripting`: Necessary for the "Inject" and "Sync Permissions" buttons to interact with Notion's share dialog.
     *   `storage`: To save and sync your guest and group lists.
     *   `sidePanel`: To display the extension's user interface.
+*   **Extension ID:** The `manifest.json` file includes a `key` that ensures the extension always has the same ID (**`ipckfikimemoffgmjbneepgfnagjjkgn`**), allowing synced data in the Chrome account to be accessible from any manually installed instance.
 *   **Warning about the Experimental Feature:** The **"Sync Permissions"** button's functionality is experimental because it directly manipulates the DOM (the internal structure) of Notion's share dialog. If Notion changes its design, this button could stop working. The "Inject" button is simpler and more likely to remain functional after future Notion updates.
 
 ## Installation (Developer Mode)
+
+> [!WARNING]
+> **Important about data persistence:** When you manually uninstall any instance of the extension installed in developer mode, Google will delete all associated cloud data. **Always perform a data export** before uninstalling the extension to avoid losing your lists of users and groups.
 
 As this is an experimental extension, it must be installed manually:
 

@@ -1,0 +1,10 @@
+# Chrome Extension Keys
+*.pem
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Idea and editors
+.vscode/
+.idea/

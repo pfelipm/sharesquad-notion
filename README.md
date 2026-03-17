@@ -38,6 +38,7 @@ Esta es la nueva función experimental, que automatiza parte del proceso.
     3.  Haz clic en el nuevo botón **"Sincronizar Permisos"**.
 *   **Resultado:** La extensión simulará la introducción de las direcciones de correo en el cuadro de diálogo ya abierto y realizará los clics necesarios para enviar las invitaciones automáticamente.
 *   **Comportamiento Importante:**
+    *   **Configuración de Accesos:** A diferencia de la inyección manual, este modo permite que la extensión establezca también el **nivel de acceso** (por ejemplo, "Puede ver", "Puede editar") de los usuarios invitados, según lo definido en el panel lateral.
     *   **Proceso Aditivo:** Se invitan a la página los nuevos usuarios de tu selección.
     *   **Modificación de Permisos:** Si un usuario de tu selección ya ha sido invitado a la página, esta función puede **actualizar su nivel de acceso** (por ejemplo, de "Puede ver" a "Puede editar").
     *   **No Eliminación:** Este proceso **nunca eliminará a un usuario** de la lista de acceso de la página, incluso si no forma parte de tu selección actual. Es una medida de seguridad para prevenir la eliminación accidental de accesos.
@@ -60,9 +61,13 @@ Esta es la nueva función experimental, que automatiza parte del proceso.
     *   `scripting`: Necesario para que los botones "Inyectar" y "Sincronizar Permisos" puedan interactuar con el cuadro de diálogo de compartir de Notion.
     *   `storage`: Para guardar y sincronizar tus listas de invitados y grupos.
     *   `sidePanel`: Para mostrar la interfaz de usuario de la extensión.
+*   **ID de la Extensión:** El archivo `manifest.json` incluye una clave (`key`) que garantiza que la extensión tenga siempre el mismo ID (**`ipckfikimemoffgmjbneepgfnagjjkgn`**), permitiendo que los datos sincronizados en la cuenta de Chrome sean accesibles desde cualquier instancia instalada manualmente.
 *   **Advertencia sobre la Función Experimental:** La función del botón **"Sincronizar Permisos"** es experimental porque manipula directamente el DOM (la estructura interna) del cuadro de diálogo de compartir de Notion. Si Notion cambia su diseño, este botón podría dejar de funcionar. El botón "Inyectar" es más simple y tiene más probabilidades de seguir funcionando tras futuras actualizaciones de Notion.
 
 ## Instalación (Modo Desarrollador)
+
+> [!WARNING]
+> **Importante sobre la persistencia de datos:** Al desinstalar manualmente cualquier instancia de la extensión instalada en modo desarrollador, Google eliminará todos los datos asociados de la nube. **Realiza siempre una exportación de tus datos** antes de desinstalar la extensión para no perder tus listas de usuarios y grupos.
 
 Al ser una extensión experiemental, la instalación se realiza de forma manual:
 
