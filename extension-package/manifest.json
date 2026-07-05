@@ -13,7 +13,8 @@
     "sidePanel"
   ],
   "host_permissions": [
-    "https://www.notion.so/*"
+    "https://www.notion.so/*",
+    "https://app.notion.com/*"
   ],
   "action": {
     "default_title": "__MSG_appName__"
@@ -27,7 +28,10 @@
   "web_accessible_resources": [
     {
       "resources": [ "content_scripts/bot.js" ],
-      "matches": [ "https://www.notion.so/*" ]
+      "matches": [
+        "https://www.notion.so/*",
+        "https://app.notion.com/*"
+      ]
     }
   ],
   "icons": {

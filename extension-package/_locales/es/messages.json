@@ -56,7 +56,7 @@
   "syncWarningMessage": { "message": "¡Has activado el modo experimental!\n\nPara usar [⇅ Sincronizar Permisos]:\n\n1. Abre el pop-up de \"Compartir\" en Notion.\n2. Haz clic en \"⇅ Sincronizar Permisos\".\n3. Selecciona los grupos/usuarios y el permiso a aplicar." },
   "syncWarningDontShow": { "message": "No volver a mostrar" },
   "notificationTitle": { "message": "ShareSquad para Notion" },
-  "notificationMessage": { "message": "Esta extensión solo funciona en páginas de notion.so." },
+  "notificationMessage": { "message": "Esta extensión solo funciona en páginas de Notion." },
   "emailPlaceholder": { "message": "nombre@ejemplo.com" },
   "groupPlaceholder": { "message": "Claustro" },
   "syncErrorShareMenu": { "message": "No se pudo encontrar el menú de compartir de Notion. Asegúrate de que el pop-up de \"Compartir\" esté abierto." },

@@ -576,7 +576,7 @@ async function getActiveNotionTab() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
 
-    if (tab && tab.url && tab.url.startsWith('https://www.notion.so/')) {
+    if (tab && tab.url && (tab.url.startsWith('https://www.notion.so/') || tab.url.startsWith('https://app.notion.com/'))) {
       return tab;
     }
 

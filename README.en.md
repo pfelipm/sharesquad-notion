@@ -76,7 +76,7 @@ As this is an experimental extension, it must be installed manually:
 3.  **Open Chrome Extensions:** Go to `chrome://extensions`.
 4.  **Enable Developer Mode:** Activate the switch in the top-right corner.
 5.  **Load the Extension:** Click "Load unpacked" and select the `extension-package` folder located inside the folder where you extracted the files.
-6.  **Done!** The extension will appear in your list, ready to use on `notion.so`.
+6.  **Done!** The extension will appear in your list, ready to use on `notion.so` or `app.notion.com`.
 
 ## Credits and Contributions
 

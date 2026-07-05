@@ -24,7 +24,7 @@ chrome.action.onClicked.addListener(async (tab) => {
   if (!tab.url) return; // Safety check
   const url = new URL(tab.url);
 
-  if (url.hostname === 'www.notion.so') {
+  if (url.hostname === 'www.notion.so' || url.hostname === 'app.notion.com') {
     await chrome.sidePanel.open({ windowId: tab.windowId });
   } else {
     // Show a notification if not on Notion

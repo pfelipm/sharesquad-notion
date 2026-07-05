@@ -56,7 +56,7 @@
   "syncWarningMessage": { "message": "You've enabled experimental mode!\n\nTo use [⇅ Sync Permissions]:\n\n1. Open the \"Share\" pop-up on a Notion page.\n2. Click \"⇅ Sync Permissions\".\n3. Select the groups/users and the permission to apply." },
   "syncWarningDontShow": { "message": "Don't show this again" },
   "notificationTitle": { "message": "ShareSquad for Notion" },
-  "notificationMessage": { "message": "This extension only works on notion.so pages." },
+  "notificationMessage": { "message": "This extension only works on Notion pages." },
   "emailPlaceholder": { "message": "name@example.com" },
   "groupPlaceholder": { "message": "e.g., Faculty" },
   "syncErrorShareMenu": { "message": "Could not find Notion share menu. Please make sure the \"Share\" pop-up is open." },
