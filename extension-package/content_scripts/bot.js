@@ -33,6 +33,38 @@ function findShareMenu() {
 }
 
 /**
+ * Finds the email/group input field in the Notion share menu.
+ * Uses a robust strategy that falls back to any text input inside the share menu dialog
+ * when the placeholder is cleared or changed (e.g. when chips are already present).
+ * @returns {HTMLInputElement|null} The input element or null.
+ */
+function findEmailInput() {
+  // 1. Try with the standard placeholders
+  let input = document.querySelector(
+    'input[placeholder*="Correo electrónico"], ' +
+    'input[placeholder*="Email or group"], ' +
+    'input[placeholder*="Correo electrónico o grupo"]'
+  );
+  if (input) return input;
+
+  // 2. Fallback: Find the share menu and get its first text input
+  const shareMenu = findShareMenu();
+  if (shareMenu) {
+    input = shareMenu.querySelector('input:not([type="checkbox"]):not([type="radio"])');
+    if (input) return input;
+  }
+
+  // 3. Fallback: Find any text input in any open dialog role container
+  const dialog = document.querySelector('div[role="dialog"]');
+  if (dialog) {
+    input = dialog.querySelector('input:not([type="checkbox"]):not([type="radio"])');
+    if (input) return input;
+  }
+
+  return null;
+}
+
+/**
  * Parses all existing user/group rows from the share menu.
  * @param {HTMLElement} shareMenu - The main share menu element.
  * @returns {Array} An array of objects: { email, permissionButton }
@@ -173,7 +205,7 @@ async function syncPermissionsOnNotionPage(payload) {
     console.log(`ShareSquad Bot: Inviting ${emailsToInvite.length} new users...`);
 
     // 1. Find the email input
-    const input = document.querySelector('input[placeholder*="Correo electrónico"], input[placeholder*="Email or group"]');
+    const input = findEmailInput();
     if (!input) {
       console.error('ShareSquad Bot: Could not find email input field.');
       return { errorKey: 'syncErrorInput' };
@@ -229,7 +261,7 @@ window.syncPermissionsOnNotionPage = syncPermissionsOnNotionPage;
  * @returns {object} { success: true } or { errorKey: '...' }
  */
 function preCheckInject() {
-  const input = document.querySelector('input[placeholder*="Correo electrónico o grupo"], input[placeholder*="Email or group"]');
+  const input = findEmailInput();
   if (input) {
     return { success: true };
   }
@@ -247,7 +279,7 @@ window.preCheckInject = preCheckInject;
  */
 function injectEmailsToNotion(emailsToInject) {
   // Find the Notion input field. This is the "fragile" part.
-  const input = document.querySelector('input[placeholder*="Correo electrónico o grupo"], input[placeholder*="Email or group"]');
+  const input = findEmailInput();
 
   if (input) {
     const currentEmails = input.value
