@@ -124,12 +124,20 @@ function findPermissionMenuItem(permissionKey) {
 
 /**
  * Finds the invite button.
- * This relies on the text, so we check both languages.
+ * Relies on the text and scopes the search to the open share dialog.
  * @returns {HTMLElement|null} The invite button.
  */
 function findInviteButton() {
-  const buttons = Array.from(document.querySelectorAll('div[role="button"]'));
-  return buttons.find(btn => btn.textContent === 'Invitar' || btn.textContent === 'Invite');
+  const shareMenu = findShareMenu() || document.querySelector('div[role="dialog"]');
+  if (!shareMenu) return null;
+
+  const buttons = Array.from(shareMenu.querySelectorAll('div[role="button"]'));
+  return buttons.find(btn => 
+    btn.textContent === 'Invitar' || 
+    btn.textContent === 'Invite' || 
+    btn.textContent === 'Compartir' || 
+    btn.textContent === 'Share'
+  );
 }
 
 /**
